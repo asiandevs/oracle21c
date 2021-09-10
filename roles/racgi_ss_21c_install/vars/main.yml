@@ -1,0 +1,42 @@
+oracle_user:                     "oracle"
+software_dir: "/u01/stage" 
+oracle_install_group:            "oinstall"
+root_dir:                        "/u02"
+stage_dir:                       "/u02/stage"
+grid_home: /u02/app/21.3/grid
+grid_base: /u02/app/grid
+asmi_name: "+ASM"
+ASMI: "+ASM"
+gridsetup_installer:              "{{ grid_home }}/gridSetup.sh"
+gi_rspfile:  gridsetup21c.rsp
+grid_user: grid
+root_user: root
+#### SECTION A - BASIC ###########
+ora_inventory: /u02/app/oraInventory
+ora_language:      en
+install_option:     CRS_SWONLY
+oracle_base: /u02/app/grid
+#oracle_home: /u02/app/19.3.0/grid
+#### SECTION B - GROUPS ############
+dba_grp: dba
+oper_grp: dba
+osasm_grp: dba
+##### SECTION C - SCAN   ###########
+scan_name:          racdb01-scan
+scan_port:          1521
+SYS_PASSWORD:           Oracle123
+SYSASMPassword:         Oracle123
+storage_Option:        FLEX_ASM_STORAGE
+dg_name:               DATA
+dg_redundancy:         EXTERNAL
+monitor_Password:       Oracle123
+ignore_DownNodes:       false
+mgt_Option:             NONE
+oms_Port:               0
+execute_RootScript:     false
+asmdiskpre:            /dev/oracleasm/disks/ASM_DISK0
+disksWthFailGrp:        '{{ asmdiskpre }}1,,{{ asmdiskpre }}2,,{{ asmdiskpre }}3,,{{ asmdiskpre }}4,,{{ asmdiskpre }}5,,{{ asmdiskpre }}6,'   
+asmdiskGroupdisks:      '{{ asmdiskpre }}1,{{ asmdiskpre }}2,{{ asmdiskpre }}3,{{ asmdiskpre }}4,{{ asmdiskpre }}5,{{ asmdiskpre }}6'   
+dg_au:                  1 
+asmdiskDiscoveryString: "/dev/oracleasm/disks"
+disk_discstr: "/dev/oracleasm/disks/*"

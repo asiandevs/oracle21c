@@ -1,0 +1,13 @@
+---
+# =============================================================================
+# Install Oracle GI 21.3 Software Only:
+# (1) Assumption: Oracle GI software is downloaded and staged
+# (2) modify required settings for oracle software installation
+# =============================================================================
+
+
+    - name: backup /etc/hosts
+      shell: cp -p /etc/hosts /etc/hosts.`date +%Y%m%d`
+
+    - name: backup /etc/sysctl.conf
+      shell: cp -p /etc/sysctl.conf /etc/sysctl.conf.`date +%Y%m%d%H%M%S`

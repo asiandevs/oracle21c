@@ -1,0 +1,61 @@
+---
+# =============================================================================
+# Install Oracle Grid Infrastructure (GI) 21.3.0 Software Only:
+# Assumption:
+#  -  RAC NODE ( example - Ora-X1 ) is configured
+#  -  All required OS groups and users are in place
+#  -  Necessay network setup is in place 
+#  -  Oracle GI software is downloaded and staged
+# Summary Steps - 
+# (1) Install CVU 
+# (2) Unzipped Oracle GI software 
+# (3) Create response file for silent installation
+# (4) Install Oracle GI 21.3.0 Software Only in Silent Mode
+# (5) Run necessay root scripts
+# =============================================================================
+- name: display pre installation of Oracle GI software message
+  debug:
+    msg:
+      - 'This playbook is for installing Oracle RAC GI Standalone software 21c , started at {{ansible_date_time.iso8601}}:'
+
+- name: Preparation tasks for installing Oracle GI software
+  block:
+    - import_tasks:     modify_os_setting.yml
+    - import_tasks:     modify_oracle_setting.yml
+    - import_tasks:     oracle_userngroup.yml
+    - import_tasks:     create_required_dirs.yml
+    - import_tasks:     install_ntp.yml
+    - import_tasks:     racgi21c_preinstall.yml
+  become:               yes
+  become_user:          root
+  tags:
+    - gisoft_pretasks
+
+- name: Install Oracle GI software using Ansible
+  block:
+    - import_tasks: racgi21c_softinstall.yml
+    - import_tasks: racgi21c_root.yml
+  become:           yes
+  become_user:      root
+
+- name: Post Oracle GI installation tasks
+  block:
+    - import_tasks: racgi21c_ConfigTools.yml
+    - import_tasks: racgi21c_postinstall.yml
+  become:           yes
+  become_user:      root
+
+- name: Remove stage directory
+  remote_user: "{{ root_user }}"
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ stage_dir }}"
+
+- name: display post install message
+  debug:
+    msg:
+      - 'This completed installing Oracle RAC GI Standalone software 21c , at {{ansible_date_time.iso8601}}:'
+      - '- Install Oracle Grid Infrastructure 21c on node ora-x1'
+      - '- END OF ALL: git repository for this task will be shared'

@@ -1,0 +1,27 @@
+---
+# ------------------------------------------------------------------
+#         setup bash profile for OS users Grid 
+# ------------------------------------------------------------------
+- name: ensure bash_profile file exists
+  copy:
+    content: ""
+    dest: /home/grid/.bash_profile
+    force: no
+    group: sys
+    owner: root
+    mode: 0555
+
+- name: bash_profile for oracle grid
+  blockinfile:
+    path: /home/grid/.bash_profile
+    insertafter: '#### for grid #####'
+    state: present
+    block: |
+      export PATH=$PATH:$HOME/bin
+      export PATH=/usr/bin:$PATH
+      export LD_LIBRARY_PATH=/usr/lib:/lib
+      export NLS_LANG=AMERICAN_AMERICA.UTF8
+      export NLS_DATE_FORMAT='DD-MM-YYYY:HH24:MI:SS'
+      export ORACLE_BASE="{{grid_base}}"
+      export ORACLE_HOME="{{grid_home}}"
+      export PATH=$ORACLE_HOME/bin:$PATH

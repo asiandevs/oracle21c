@@ -1,0 +1,41 @@
+oracle_user:                     "oracle"
+root_user:                       "root"
+oracle_install_group:            "oinstall"
+stage_dir:                       "/u02/stage"
+oracle_base:                     "/u02/app/oracle"
+oracle_inventory:                "/u02/app/oraInventory"
+oracle_home:                     "{{ oracle_base }}/product/21.3.0/db300"
+oracle_home_name:                "OraDB21Home1"
+grid_home:                       "/u02/app/21.3.0/grid"
+silent_listener_config_file:     "{{ stage_dir }}/silent-lsnr21c-config.rsp"
+dbfile_path:                     "{{ oracle_base }}/oradata/"
+dbrac21c_rsp:                    dbrac21c.rsp
+oracle_sid:                      eaymd
+oracle_sid2:                     eaymd2
+instancevw:                      "v$instance"
+asm_instance:                    "+ASM1"
+grid_user:                       grid
+db_unqname:                      eaymd
+db_name :                        eaymd
+cdb_name:                        eaymd
+dbsnmppwd :                      "Oracle123"
+systempwd :                      "Oracle123"
+syspwd :                         "Family#Love_13"
+oratab :                          /etc/oratab
+spfile :                          spfile
+recodiskgroup:                RECO
+dbdiskgroup:                  DATA
+recodisks1:                   ASM_DISK07
+recodisks2:                   ASM_DISK08
+vredundancy:                 EXTERNAL
+vausize:                     1
+vcompatibility:              21.0.0.0
+env_db:
+  ORACLE_HOME: "{{ oracle_home }}"
+  ORACLE_BASE: "{{ oracle_base }}"
+  ORACLE_SID: "{{ oracle_sid }}1"
+  PATH: "{{ oracle_home }}/bin:{{ oracle_home }}/OPatch:$PATH:/bin:/usr/bin:/usr/local/bin:/usr/ccs/bin:/usr/sbin"
+env_grid:
+  ORACLE_HOME: "{{ grid_home }}"
+  ORACLE_SID: "{{ asm_instance }}"
+  PATH: "{{ grid_home }}/bin:{{ grid_home }}/OPatch:$PATH:/bin:/usr/bin:/usr/local/bin:/usr/ccs/bin:/usr/sbin"

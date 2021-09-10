@@ -1,0 +1,4 @@
+export ORACLE_SID={{ db_name }}1
+export ORACLE_HOME={{ oracle_home }}
+export PATH=$PATH:$ORACLE_HOME/bin
+orapwd file='+{{ dbdiskgroup }}/orapw{{ db_name }}' DBUNIQUENAME='{{ db_unqname }}' password={{ syspwd }} force=y 

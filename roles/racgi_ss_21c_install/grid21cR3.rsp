@@ -1,0 +1,120 @@
+oracle.install.responseFileVersion=/oracle/install/rspfmt_crsinstall_response_schema_v19.0.0
+
+###############################################################################
+#                                                                             #
+#                          SECTION A - BASIC                                  #
+#                                                                             #
+###############################################################################
+
+INVENTORY_LOCATION={{ vora_inventory }}
+#oracle.install.option=CRS_CONFIG
+oracle.install.option=HA_CONFIG
+ORACLE_BASE={{ grid_base }}
+################################################################################
+#                              SECTION B - GROUPS                              #
+################################################################################
+
+oracle.install.asm.OSDBA=asmdba
+oracle.install.asm.OSOPER=asmoper
+oracle.install.asm.OSASM=asmadmin
+
+################################################################################
+#                                                                              #
+#                           SECTION C - SCAN                                   #
+#                                                                              #
+################################################################################
+#-------------------------------------------------------------------------------
+oracle.install.crs.config.scanType=LOCAL_SCAN
+oracle.install.crs.config.SCANClientDataFile=
+oracle.install.crs.config.gpnp.scanName={{ vscan_name }}
+oracle.install.crs.config.gpnp.scanPort={{ vscan_port }}
+
+################################################################################
+#                                                                              #
+#                           SECTION D - CLUSTER & GNS                         #
+#                                                                              #
+################################################################################
+#-------------------------------------------------------------------------------
+
+################################################################################
+#                                                                              #
+#                              SECTION E - STORAGE                             #
+#                                                                              #
+################################################################################
+oracle.install.crs.config.storageOption={{ vstorage_Option }}
+oracle.install.crs.config.sharedFileSystemStorage.votingDiskLocations=
+oracle.install.crs.config.sharedFileSystemStorage.ocrLocations=               	
+################################################################################
+#                                                                              #
+#                               SECTION F - IPMI                               #
+#                                                                              #
+################################################################################
+
+#-------------------------------------------------------------------------------
+oracle.install.crs.config.useIPMI=false
+oracle.install.crs.config.ipmi.bmcUsername=
+oracle.install.crs.config.ipmi.bmcPassword=
+################################################################################
+#                                                                              #
+#                                SECTION G - ASM                               #
+#                                                                              #
+################################################################################
+oracle.install.asm.SYSASMPassword={{ SYSASMPassword }}
+oracle.install.asm.diskGroup.name={{ vdg_name }}
+oracle.install.asm.diskGroup.redundancy={{ vdg_redundancy }}
+oracle.install.asm.diskGroup.AUSize={{ vdg_au }}
+oracle.install.asm.diskGroup.FailureGroups=
+#oracle.install.asm.diskGroup.disksWithFailureGroupNames=/dev/oracleasm/disks/ASM_DISK01,,/dev/oracleasm/disks/ASM_DISK02,,/dev/oracleasm/disks/ASM_DISK03,,/dev/oracleasm/disks/ASM_DISK04,,/dev/oracleasm/disks/ASM_DISK05,,/dev/oracleasm/disks/ASM_DISK06,
+oracle.install.asm.diskGroup.disksWithFailureGroupNames={{ vdisksWthFailGrp }}
+#oracle.install.asm.diskGroup.disks=/dev/oracleasm/disks/ASM_DISK01,/dev/oracleasm/disks/ASM_DISK02,/dev/oracleasm/disks/ASM_DISK03,/dev/oracleasm/disks/ASM_DISK04,/dev/oracleasm/disks/ASM_DISK05,/dev/oracleasm/disks/ASM_DISK06
+oracle.install.asm.diskGroup.disks={{ vasmdiskGroupdisks }}
+oracle.install.asm.diskGroup.quorumFailureGroupNames=
+oracle.install.asm.diskGroup.diskDiscoveryString={{ vdisk_discstr }}
+oracle.install.asm.monitorPassword={{ monitor_Password }}
+oracle.install.asm.gimrDG.name=
+oracle.install.asm.gimrDG.redundancy=
+oracle.install.asm.gimrDG.AUSize=1
+oracle.install.asm.gimrDG.FailureGroups=
+oracle.install.asm.gimrDG.disksWithFailureGroupNames=
+oracle.install.asm.gimrDG.disks=
+oracle.install.asm.gimrDG.quorumFailureGroupNames=
+oracle.install.asm.configureAFD=false
+oracle.install.crs.configureRHPS=false
+
+################################################################################
+#                                                                              #
+#                             SECTION H - UPGRADE                              #
+#                                                                              #
+################################################################################
+oracle.install.crs.config.ignoreDownNodes=false               	
+################################################################################
+#                                                                              #
+#                               MANAGEMENT OPTIONS                             #
+#                                                                              #
+################################################################################
+oracle.install.config.managementOption=NONE
+oracle.install.config.omsHost=
+oracle.install.config.omsPort=0
+oracle.install.config.emAdminUser=
+oracle.install.config.emAdminPassword=
+################################################################################
+#                                                                              #
+#                      Root script execution configuration                     #
+#                                                                              #
+################################################################################
+
+#-------------------------------------------------------------------------------------------------------
+oracle.install.crs.rootconfig.executeRootScript=false
+oracle.install.crs.config.batchinfo=
+################################################################################
+#                                                                              #
+#                           APPLICATION CLUSTER OPTIONS                        #
+#                                                                              #
+################################################################################
+oracle.install.crs.app.applicationAddress=
+#################################################################################
+#										#
+#			    DELETE NODE OPTIONS					#
+#										#
+#################################################################################
+oracle.install.crs.deleteNode.nodes=

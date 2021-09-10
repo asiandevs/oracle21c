@@ -1,0 +1,148 @@
+---
+# =============================================================================
+# Install Oracle GI 21.3 Software Only:
+# (1) Assumption: Oracle GI software is downloaded and staged
+# (2) Create or modify required users 
+# =============================================================================
+    - name: check group for oinstall
+      shell: grep oinstall /etc/group
+      register: result
+      ignore_errors: True
+      changed_when: False
+
+    - name: add group for oinstall
+      shell: /usr/sbin/groupadd -g 54321 oinstall
+      changed_when: False
+      when: result|failed
+
+    - name: check group for dba
+      shell: grep dba /etc/group
+      register: result
+      ignore_errors: True
+      changed_when: False
+
+    - name: add group for dba
+      shell: /usr/sbin/groupadd -g 54322 dba
+      changed_when: False
+      when: result|failed
+
+    - name: check group for oper
+      shell: grep oper /etc/group
+      register: result
+      ignore_errors: True
+      changed_when: False
+
+    - name: add group for oper
+      shell: /usr/sbin/groupadd -g 54323 oper
+      changed_when: False
+      when: result|failed
+
+    - name: check group for backupdba
+      shell: grep backupdba /etc/group
+      register: result
+      ignore_errors: True
+      changed_when: False
+
+    - name: add group for backupdba
+      shell: /usr/sbin/groupadd -g 54324 backupdba
+      changed_when: False
+      when: result|failed
+
+    - name: check group for dgdba
+      shell: grep dgdba /etc/group
+      register: result
+      ignore_errors: True
+      changed_when: False
+
+    - name: add group for dgdba
+      shell: /usr/sbin/groupadd -g 54325 dgdba
+      changed_when: False
+      when: result|failed
+
+    - name: check group for kmdba
+      shell: grep kmdba /etc/group
+      register: result
+      ignore_errors: True
+      changed_when: False
+
+    - name: add group for kmdba
+      shell: /usr/sbin/groupadd -g 54326 kmdba
+      changed_when: False
+      when: result|failed
+
+    - name: check group for asmadmin
+      shell: grep asmadmin /etc/group
+      register: result
+      ignore_errors: True
+      changed_when: False
+
+    - name: add group for asmadmin
+      shell: /usr/sbin/groupadd -g 54329 asmadmin
+      changed_when: False
+      when: result|failed
+
+    - name: check group for asmdba
+      shell: grep asmdba /etc/group
+      register: result
+      ignore_errors: True
+      changed_when: False
+
+    - name: add group for asmdba
+      shell: /usr/sbin/groupadd -g 54327 asmdba
+      changed_when: False
+      when: result|failed
+
+    - name: check group for asmoper
+      shell: grep asmoper /etc/group
+      register: result
+      ignore_errors: True
+      changed_when: False
+
+    - name: add group for asmoper
+      shell: /usr/sbin/groupadd -g 54328 asmoper
+      changed_when: False
+      when: result|failed
+
+    - name: check group for racdba
+      shell: grep racdba /etc/group
+      register: result
+      ignore_errors: True
+      changed_when: False
+
+    - name: add group for racdba
+      shell: /usr/sbin/groupadd -g 54330 racdba
+      changed_when: False
+      when: result|failed
+
+    - name: check user for grid
+      shell: id grid
+      register: result
+      ignore_errors: True
+      changed_when: False
+
+    - name: add user for grid
+      shell: /usr/sbin/useradd -u 54331 -g oinstall -G dba,asmadmin,asmdba,asmoper,racdba grid
+      changed_when: False
+      when: result|failed
+
+    - name: check user for oracle
+      shell: id oracle
+      register: result
+      ignore_errors: True
+      changed_when: False
+
+    - name: add user for oracle
+      shell: /usr/sbin/useradd -u 54321 -g oinstall -G dba,backupdba,dgdba,kmdba,asmdba,oper,racdba,asmdba oracle
+      changed_when: False
+      when: result|failed
+
+    - name: change password for grid
+      user:
+        name: "grid"
+        password: "{{ 'oracle' | password_hash('sha512') }}"
+
+    - name: change password for oracle
+      user:
+        name: "oracle"
+        password: "{{ 'oracle' | password_hash('sha512') }}"
+

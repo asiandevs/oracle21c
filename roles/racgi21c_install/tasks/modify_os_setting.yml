@@ -1,0 +1,21 @@
+---
+# =============================================================================
+# Install Oracle GI 21.3 Software Only:
+# (1) Assumption: Oracle GI software is downloaded and staged
+# (2) modify settings for OS
+# =============================================================================
+
+    - name: change SELinux is disable
+      lineinfile: dest=/etc/selinux/config create=no insertafter=EOF line='SELINUX=disabled'
+
+    - name: stop firewall
+      shell: systemctl stop firewalld
+
+    - name: stop auto start a firewall
+      shell: systemctl disable firewalld
+
+    - name: stop auto start a chronyd
+      shell: systemctl disable chronyd
+
+    - name: stop chronyd
+      shell: systemctl stop chronyd

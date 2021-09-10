@@ -1,0 +1,23 @@
+---
+# =============================================================================
+# Install Oracle GI 21.3.0 Software Only:
+# (1) Install Oracle GI 21.3.0 executeConfigTools in Silent Mode
+# (2) Validate output logs 
+# =============================================================================
+- name: Install Oracle 21c GI ConfigTools in Silent Mode
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ grid_user }}"
+  shell: "{{ grid_home }}/gridSetup.sh -silent -executeConfigTools -responseFile {{ stage_dir }}/{{ gi_rspfile }} > /u02/stage/giconfigoutput.log"
+  register: racgi_configtools_result
+
+- name: Get the logfile name ConfigTools
+  remote_user: "{{ root_user }}"
+  when: inventory_hostname in groups['ora-x1']
+  shell: grep -r "Successfully Configured Software *" /u02/stage/giconfigoutput.log
+  register: configtools_log
+
+- name: Get the logfile information for ConfigTools
+  debug: msg='{{configtools_log.stdout_lines}}'
+
