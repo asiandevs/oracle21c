@@ -1,4 +1,8 @@
-# Grid Infrastructure 21c Software Install
+# Grid Infrastructure 21c 
+### GI Software Install
+### RAC RDBMS Software Install
+### RAC Database Creation CDB & PDB
+### GI for a Standalone Server
 
 This Ansinble playbook is for Oracle Grid Infrastructure Installation, Oracle RAC Installation and Create RAC database 21c 64-bit on Oracle Linux 7 (OL7) 64-bit.
 ![img](https://miro.medium.com/max/1400/1*Dn-ENgHGeaJk8kpJXE_Sdw.png)
