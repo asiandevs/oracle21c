@@ -44,35 +44,7 @@ roles                  | tasks
    #- racgi21c_install
    #- racgi_ss_21c_install
 ```
-## Tree Structure for this playbook is 
 
-```
-[root@oel75 ansible]# tree roles/racdbsoft21c_install
-roles/racdbsoft21c_install
-├── files
-│   ├── 19cEE_SoftOnly.rsp.del
-│   └── silent-19clsnr-config.rsp
-├── samplerunnote.txt
-├── tasks
-│   ├── main.yml
-│   ├── racdbsoft19c_exerootn1.yml
-│   ├── racdbsoft19c_exerootn2.yml
-│   ├── racdbsoft19c_installvalidate.yml
-│   ├── racdbsoft19c_presoftinstall.yml
-│   └── racdbsoft19c_softinstall.yml
-├── templates
-│   ├── 19cEE_SoftOnly.rsp.j2
-│   ├── 19cRACEE_SoftOnly.rsp.j2
-│   ├── dbsoft19c.rsp.del
-│   ├── dbsoft19c.rsp.j2
-│   ├── oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm
-│   ├── oracle-database-preinstall-21c-1.0-1.el7.x86_64.rpm
-│   ├── silent_listen_config.rsp
-│   └── silent_listen_config.rsp.j2
-└── vars
-    └── main.yml
-
-```
 ## Summary commands: 
 
 1. Clone this repository:
