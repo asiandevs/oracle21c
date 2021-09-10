@@ -46,7 +46,39 @@ roles                  | tasks
    - racgi21c_install
    #- racgi_ss_21c_install
 ```
+## Tree structure 
+```
+[root@oel75 ansible]# tree roles/racgi21c_install
+roles/racgi21c_install
+├── README.md
+├── tasks
+│   ├── create_dirs.yml
+│   ├── create_grid_dirs.yml
+│   ├── create_oracle_dirs.yml
+│   ├── create_required_dirs.yml
+│   ├── disable_firewall.yml
+│   ├── grid_bash_profile.yml
+│   ├── install_ntp.yml
+│   ├── main.yml
+│   ├── modify_oracle_setting.yml
+│   ├── modify_os_setting.yml
+│   ├── oracle_userngroup.yml
+│   ├── racgi21c_ConfigTools.yml
+│   ├── racgi21c_oinsroot.yml
+│   ├── racgi21c_postinstall.yml
+│   ├── racgi21c_preinstall.yml
+│   ├── racgi21c_root.yml
+│   └── racgi21c_softinstall.yml
+├── templates
+│   ├── gridsetup21c.rsp
+│   ├── gridsetup21c.rsp.up01
+│   ├── oracle-database-preinstall-21c-1.0-1.el7.x86_64.rpm
+│   └── silent_listen_config.rsp.j2
+└── vars
+    └── main.yml
 
+3 directories, 23 files
+```
 ## Summary commands: 
 
 1. Clone this repository:
