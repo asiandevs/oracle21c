@@ -114,7 +114,7 @@ For role 1, 2, 3 - you can execute one by one or all of them together. Only thin
 
 Oracle Database 21c Grid Infrastructure (21.3) for Linux x86-64
      - LINUX.X64_213000_grid_home.zip
-Oracle Database 21c (19.3) for Linux x86-64 
+Oracle Database 21c (21.3) for Linux x86-64 
      - LINUX.X64_213000_db_home.zip
 
 3. Configure an Ansible inventory file (example as below) 
