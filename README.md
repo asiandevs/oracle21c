@@ -31,8 +31,8 @@ There are three roles with this playbook:
 
 roles                  | tasks
 ---------------------- | ---------------------------------
-1 racgi21c_install     | # **To Install Oracle Grid Infrastructure Installation**
-2 racdbsoft21c_install | # **To Install Oracle RAC software installation**
-3 racdb21c_create      | # **To create Two Node RACDB ~21C**
-4 racgi_ss_21c_install | # **Oracle Grid Infrastructure for a Standalone Server
+1 racgi21c_install     | **To Install Oracle Grid Infrastructure Installation**
+2 racdbsoft21c_install | **To Install Oracle RAC software installation**
+3 racdb21c_create      | **To create Two Node RACDB ~21C**
+4 racgi_ss_21c_install | **Oracle Grid Infrastructure for a Standalone Server**
 
