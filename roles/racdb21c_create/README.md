@@ -46,6 +46,39 @@ roles                  | tasks
    #- racgi21c_install
    #- racgi_ss_21c_install
 ```
+## Tree structure of this playbook
+```
+[root@oel75 ansible]# tree roles/racdb21c_create
+roles/racdb21c_create
+├── files
+│   ├── adrci_setup.sh
+│   ├── chk_version.sql
+│   ├── dbca21cSI.rsp
+│   └── silent-21clsnr-config.rsp
+├── tasks
+│   ├── main.yml
+│   ├── rac21c_predbexsachk.yml
+│   ├── rac21c_predbinstall.yml
+│   ├── rac21c_predbsoftchk.yml
+│   ├── racdb21c_createdbstatus.yml
+│   ├── racdb21c_createdb.yml
+│   ├── racdb21c_postdbcreate.yml
+│   ├── racdb21c_pretemplatecreate.yml
+│   └── racdb21c_recodg.yml
+├── templates
+│   ├── check_spfile_path.sh.j2
+│   ├── createdg_reco.sh.j2
+│   ├── dbrac21c_rsp.j2
+│   ├── orapwd.sh.j2
+│   ├── set_adrci_policy.j2
+│   ├── setup_compatible.sh.j2
+│   ├── setup_db_crefile_dest.sh.j2
+│   ├── setup_spfile.sh.j2
+│   └── silent-lsnr21c-config.rsp.j2
+└── vars
+    └── main.yml
+
+```
 
 ## Summary commands: 
 
