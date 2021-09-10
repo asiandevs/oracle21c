@@ -35,16 +35,71 @@ roles                  | tasks
 ### To Install Oracle Grid Infrastructure Installation:
 > Enable role 1, disable role 2 and role3
 
+```
+[root@oel75 ansible]# cat oracleGInRAC21c.yml
+- hosts: ora-x1
+  user: root
+
+  roles:
+   #- racdb21c_create
+   #- racdbsoft21c_install
+   - racgi21c_install
+   #- racgi_ss_21c_install
+```
+
 ### To Install Oracle RAC software installation:
 > Enable role 2, disable role 1 and role3 [ Pre-step: Role 1 should be completed ]
+```
+[root@oel75 ansible]# cat oracleGInRAC21c.yml
+- hosts: ora-x1
+  user: root
+
+  roles:
+   #- racdb21c_create
+   - racdbsoft21c_install
+   #- racgi21c_install
+   #- racgi_ss_21c_install
+```
 
 ### To create Two Node RACDB ~21C:
 > Enable role 3, disable role 1 and role2 [ Pre-step: Role 1 and 2 should be completed ]
+```
+[root@oel75 ansible]# cat oracleGInRAC21c.yml
+- hosts: ora-x1
+  user: root
 
+  roles:
+   - racdb21c_create
+   #- racdbsoft21c_install
+   #- racgi21c_install
+   #- racgi_ss_21c_install
+```
 For role 1, 2, 3 - you can execute one by one or all of them together. Only thing to make sure the sequence.
+```
+[root@oel75 ansible]# cat oracleGInRAC21c.yml
+- hosts: ora-x1
+  user: root
+
+  roles:
+   - racgi21c_install
+   - racdbsoft21c_install
+   - racdb21c_create
+   #- racgi_ss_21c_install
+```
 
 ### To Install Oracle Grid Infrastructure for a Standalone Server
 > Enable only role 4 -- This is a separate individual task
+> ```
+[root@oel75 ansible]# cat oracleGInRAC21c.yml
+- hosts: ora-x1
+  user: root
+
+  roles:
+   #- racdb21c_create
+   #- racdbsoft21c_install
+   #- racgi21c_install
+   - racgi_ss_21c_install
+```
 
 ## Summary commands: 
 
@@ -76,8 +131,9 @@ inventory = ./inventory
 192.168.56.102
 192.168.56.103
 ```
+Note: Modify variables based on you setup or your requirements. 
+
 4. Run the playbook role "oracleGInRAC21c.yml"
 ```
 ansible-playbook oracleGInRAC21c.yml  
 ```
-Note: Modify variables based on you setup or your requirements. 
