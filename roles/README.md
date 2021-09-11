@@ -93,7 +93,8 @@ For role 1, 2, 3 - you can execute one by one or all of them together. Only thin
 
 ### To Install Oracle Grid Infrastructure for a Standalone Server
 > Enable only role 4 -- This is a separate individual task
-> ```
+
+```
 [root@oel75 ansible]# cat oracleGInRAC21c.yml
 - hosts: ora-x1
   user: root
