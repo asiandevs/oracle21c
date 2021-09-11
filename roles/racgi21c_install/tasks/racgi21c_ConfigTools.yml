@@ -4,7 +4,7 @@
 # (1) Install Oracle GI 21.3.0 executeConfigTools in Silent Mode
 # (2) Validate output logs 
 # =============================================================================
-- name: Install Oracle 19c GI ConfigTools in Silent Mode
+- name: Install Oracle 21c GI ConfigTools in Silent Mode
   when: inventory_hostname in groups['ora-x1']
   remote_user: "{{ root_user }}"
   become: yes
