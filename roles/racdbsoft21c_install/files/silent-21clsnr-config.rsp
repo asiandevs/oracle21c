@@ -1,5 +1,10 @@
+---
+# =====================================================================================
+# Install Oracle Database 21.3.0 software for RAC using Ansible:
+# Defining silent response file for listener configuration
+# =====================================================================================
 [GENERAL]
-RESPONSEFILE_VERSION="19.0"
+RESPONSEFILE_VERSION="21.0"
 CREATE_TYPE="CUSTOM"
 [oracle.net.ca] 
 INSTALLED_COMPONENTS={"server","net8","javavm"} 

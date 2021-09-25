@@ -1,3 +1,9 @@
+---
+# =====================================================================================
+# Install Oracle Database 21.3.0 software for RAC using Ansible:
+# Defining Cariables as of my setup 
+# =====================================================================================
+
 oracle_user:                     "oracle"
 oracle_install_group:            "oinstall"
 softstage_dir:                   "/u01/stage"

@@ -1,0 +1,193 @@
+[root@oel75 ansible]# ansible-playbook oracleGInRAC21c.yml
+
+PLAY [ora-x1, ora-x2] ****************************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************************************
+ok: [192.168.56.102]
+ok: [192.168.56.103]
+
+TASK [racdbsoft21c_install : display pre installation of database software message] **************************************************
+ok: [192.168.56.102] => {
+    "msg": [
+        "This playbook is for installing Oracle RAC database software 21c at 2021-09-25T00:21:14Z:"
+    ]
+}
+ok: [192.168.56.103] => {
+    "msg": [
+        "This playbook is for installing Oracle RAC database software 21c at 2021-09-25T00:21:15Z:"
+    ]
+}
+
+TASK [racdbsoft21c_install : RACDBSOFT_INSTALL | Check if Binaries are already installed] ********************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdbsoft21c_install : RACDBSOFT_INSTALL | Create required directories] ********************************************************
+changed: [192.168.56.102] => (item=/u02/stage/scripts)
+changed: [192.168.56.103] => (item=/u02/stage/scripts)
+ok: [192.168.56.102] => (item=/u02/app/oracle)
+ok: [192.168.56.103] => (item=/u02/app/oracle)
+ok: [192.168.56.102] => (item=/u02/stage)
+ok: [192.168.56.103] => (item=/u02/stage)
+changed: [192.168.56.102] => (item=/u02/app/oracle/product/21.3.0/db300)
+changed: [192.168.56.103] => (item=/u02/app/oracle/product/21.3.0/db300)
+
+TASK [racdbsoft21c_install : RACDBSOFT_INSTALL | copy database pre install  21c rpm pfile to the target database server] *************
+changed: [192.168.56.102] => (item=oracle-database-preinstall-21c-1.0-1.el7.x86_64.rpm)
+changed: [192.168.56.103] => (item=oracle-database-preinstall-21c-1.0-1.el7.x86_64.rpm)
+
+TASK [racdbsoft21c_install : RACDBSOFT_INSTALL | install predbinstall rpm from a local file] *****************************************
+ok: [192.168.56.102]
+
+TASK [racdbsoft21c_install : RACDBSOFT_INSTALL | install predbinstall rpm from a local file] *****************************************
+ok: [192.168.56.103]
+
+TASK [racdbsoft21c_install : RACDBSOFT_INSTALL | Unpack Oracle 21c Database Software] ************************************************
+changed: [192.168.56.102]
+
+TASK [racdbsoft21c_install : RACDBSOFT_INSTALL | Create silent response file from template] ******************************************
+changed: [192.168.56.102]
+
+TASK [racdbsoft21c_install : debug] **************************************************************************************************
+ok: [192.168.56.102] => {
+    "msg": "Installing Oracle Database Software - /u02/app/oracle/product/21.3.0/db300"
+}
+ok: [192.168.56.103] => {
+    "msg": "Installing Oracle Database Software - /u02/app/oracle/product/21.3.0/db300"
+}
+
+TASK [racdbsoft21c_install : RACDBSOFT_INSTALL | Install Oracle 21c Database Software] ***********************************************
+changed: [192.168.56.102]
+
+TASK [racdbsoft21c_install : RACDBSOFT_INSTALL | Get the output log status] **********************************************************
+changed: [192.168.56.102]
+
+TASK [racdbsoft21c_install : RACDBSOFT_INSTALL | Output from Post Database Software Installation Check] ******************************
+ok: [192.168.56.102] => {
+    "racdbsoftinstall_log.stdout": "Successfully Setup Software with warning(s)."
+}
+
+TASK [racdbsoft21c_install : RACDBSOFT_INSTALL | Execute root.sh on node1] ***********************************************************
+changed: [192.168.56.102]
+
+TASK [racdbsoft21c_install : output log file name] ***********************************************************************************
+changed: [192.168.56.102]
+
+TASK [racdbsoft21c_install : set_fact] ***********************************************************************************************
+ok: [192.168.56.102]
+
+TASK [racdbsoft21c_install : Get root.sh output for node1.] **************************************************************************
+changed: [192.168.56.102]
+
+TASK [racdbsoft21c_install : debug] **************************************************************************************************
+ok: [192.168.56.102] => {
+    "msg": [
+        "Performing root user operation.",
+        "",
+        "The following environment variables are set as:",
+        "ORACLE_OWNER= oracle",
+        "ORACLE_HOME=  /u02/app/oracle/product/21.3.0/db300",
+        "Copying dbhome to /usr/local/bin ...",
+        "Copying oraenv to /usr/local/bin ...",
+        "Copying coraenv to /usr/local/bin ...",
+        "",
+        "Entries will be added to the /etc/oratab file as needed by",
+        "Database Configuration Assistant when a database is created",
+        "Finished running generic part of root script.",
+        "Now product-specific root actions will be performed."
+    ]
+}
+
+TASK [racdbsoft21c_install : RACDBSOFT_INSTALL | Execute root.sh on node2] ***********************************************************
+changed: [192.168.56.103]
+
+TASK [racdbsoft21c_install : output log file name] ***********************************************************************************
+changed: [192.168.56.103]
+
+TASK [racdbsoft21c_install : set_fact] ***********************************************************************************************
+ok: [192.168.56.103]
+
+TASK [racdbsoft21c_install : Get root.sh output for node2.] **************************************************************************
+changed: [192.168.56.103]
+
+TASK [racdbsoft21c_install : debug] **************************************************************************************************
+ok: [192.168.56.103] => {
+    "msg": [
+        "Performing root user operation.",
+        "",
+        "The following environment variables are set as:",
+        "ORACLE_OWNER= oracle",
+        "ORACLE_HOME=  /u02/app/oracle/product/21.3.0/db300",
+        "Copying dbhome to /usr/local/bin ...",
+        "Copying oraenv to /usr/local/bin ...",
+        "Copying coraenv to /usr/local/bin ...",
+        "",
+        "Entries will be added to the /etc/oratab file as needed by",
+        "Database Configuration Assistant when a database is created",
+        "Finished running generic part of root script.",
+        "Now product-specific root actions will be performed."
+    ]
+}
+
+TASK [racdbsoft21c_install : RACDBSOFT_INSTALL | Get database and patch versions] ****************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdbsoft21c_install : output for database software and Patch information] *****************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdbsoft21c_install : Output from Post Database Software Installation Check] **************************************************
+ok: [192.168.56.102] => {
+    "dbsoftinfo.stdout_lines|map('trim')|list": [
+        "Oracle Database 21c                                                  21.0.0.0.0"
+    ]
+}
+ok: [192.168.56.103] => {
+    "dbsoftinfo.stdout_lines|map('trim')|list": [
+        "Oracle Database 21c                                                  21.0.0.0.0"
+    ]
+}
+
+TASK [racdbsoft21c_install : Remove stage directory] *********************************************************************************
+changed: [192.168.56.102] => (item=/u02/stage)
+changed: [192.168.56.103] => (item=/u02/stage)
+
+TASK [racdbsoft21c_install : display post install message] ***************************************************************************
+ok: [192.168.56.102] => {
+    "msg": [
+        "This Steps completed below task for RAC database at 2021-09-25T00:21:14Z:",
+        "Install of Oracle 21c Oracle RAC Database Software task is completed successfully in Silent Mode"
+    ]
+}
+ok: [192.168.56.103] => {
+    "msg": [
+        "This Steps completed below task for RAC database at 2021-09-25T00:21:15Z:",
+        "Install of Oracle 21c Oracle RAC Database Software task is completed successfully in Silent Mode"
+    ]
+}
+
+PLAY RECAP ***************************************************************************************************************************
+192.168.56.102             : ok=22   changed=13   unreachable=0    failed=0
+192.168.56.103             : ok=17   changed=9    unreachable=0    failed=0
+
+[root@oel75 ansible]# ssh ora-x1
+Last login: Sat Sep 25 10:38:58 2021 from oel75.localdomain
+[root@ora-x1 ~]# sudo su - oracle
+Last login: Sat Sep 25 10:37:46 AEST 2021 from ora-x2.localdomain on pts/3
+oracle@ora-x1.localdomain:/home/oracle$ export ORACLE_HOME=/u02/app/oracle/product/21.3.0/db300
+oracle@ora-x1.localdomain:/home/oracle$ export PATH=$ORACLE_HOME/bin:$PATH
+oracle@ora-x1.localdomain:/home/oracle$ sqlplus -version
+
+SQL*Plus: Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+oracle@ora-x1.localdomain:/home/oracle$ ssh ora-x2
+Last login: Sat Sep 25 10:20:03 2021 from ora-x1.localdomain
+[oracle@ora-x2 ~]$ export ORACLE_HOME=/u02/app/oracle/product/21.3.0/db300
+[oracle@ora-x2 ~]$ export PATH=$ORACLE_HOME/bin:$PATH
+[oracle@ora-x2 ~]$ sqlplus -version
+
+SQL*Plus: Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+

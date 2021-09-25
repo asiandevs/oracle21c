@@ -1,4 +1,4 @@
-responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v19.0.0
+responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v21.0.0
 gdbName=eaymd
 sid=eaymd
 databaseConfigType=RAC
@@ -16,7 +16,7 @@ pdbName=
 useLocalUndoForPDBs=true
 pdbAdminPassword=
 nodelist=ora-x1,ora-x2
-templateName=/u02/app/oracle/product/19.3.0/db300/assistants/dbca/templates/General_Purpose.dbc
+templateName=/u02/app/oracle/product/21.3.0/db300/assistants/dbca/templates/General_Purpose.dbc
 sysPassword=Oracle123
 systemPassword=Oracle123
 serviceUserPassword=
