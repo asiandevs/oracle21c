@@ -65,12 +65,11 @@ roles/racdbsoft21c_install
 │   ├── 21cRACEE_SoftOnly.rsp.j2
 │   ├── dbsoft21c.rsp
 │   ├── dbsoft21c.rsp.j2
-│   ├── silent_listen_config.rsp
+│   ├── oracle-database-preinstall-21c-1.0-1.el7.x86_64.rpm
 │   └── silent_listen_config.rsp.j2
 └── vars
     └── main.yml
 
-4 directories, 15 files
 ```
 ## Summary commands: 
 
