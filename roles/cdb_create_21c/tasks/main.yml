@@ -1,0 +1,153 @@
+- name: Create_CDB | create required directories
+  when: inventory_hostname in groups['ora-x1']
+  file:
+    path="{{ item }}"
+    state=directory
+    owner="{{ oracle_user }}"
+    group="{{ oracle_install_group }}"
+    mode=0755
+  with_items:
+    - "{{ stage_dir }}"
+    - "{{ dbfile_path }}"
+    - "{{ fra_path }}"
+  tags:
+    - dbcreate_crdirs
+
+- name: Copy required script to Primary database server
+  when: inventory_hostname in groups['ora-x1']
+  copy:
+    src=roles/cdb_create_21c/files/{{ item }}
+    dest={{ stage_dir }}
+    owner="{{ oracle_user }}"
+    group="{{ oracle_install_group }}"
+    mode=0775
+    remote_src=no
+  with_items:
+    - enable_dbarchlogs.sql
+    - tns_upd.sh
+
+- name: Create_CDB | Check if database is already created
+  when: inventory_hostname in groups['ora-x1'] and item.cdb_name is defined
+  remote_user: "{{ root_user }}"
+  shell: grep {{ item.cdb_name }}:{{ oracle_home }} /etc/oratab |wc -l
+  with_items: "{{db_properties}}"
+  tags:
+    - dbcreate_chkdbexist
+  register: chkdbexist
+
+- name: Create_CDB | create silent listener config file
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  template:
+    src=roles/cdb_create_21c/templates/listener.rsp.{{ item.oracle_dbversion }}.j2
+    dest={{ stage_dir }}/silent-lsnr21c-config.rsp
+    owner="{{ oracle_user }}"
+    group="{{ oracle_install_group }}"
+    mode=0775
+  with_items:
+      - "{{ db_properties }}"
+  register: listener_rspfg_file
+  tags:
+    - dbcreate_lsnrcfg
+
+- name: Create_CDB | Configuring listener
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  action: shell export ORACLE_HOME={{ oracle_home }}; $ORACLE_HOME/bin/netca -silent -responseFile {{ silent_listener_config_file }}
+  ignore_errors: True
+  tags:
+    - dbcreate_execlsnrcfg
+
+- name: Create_CDB | create silent database install file
+  when: inventory_hostname in groups['ora-x1'] 
+  remote_user: "{{ root_user }}"
+  template:
+    src=roles/cdb_create_21c/templates/dbcacdb.rsp.{{ item.0.oracle_dbversion }}.j2 
+    dest='{{ stage_dir }}/silent_21cdb_config.rsp'
+    owner="{{ oracle_user }}"
+    group="{{ oracle_install_group }}"
+    mode=0755
+  with_together:
+     - "{{db_properties}}"
+  register: silent_install_file_created
+  tags:
+    - dbcreate_dbcfg
+
+- name: Create_CDB | Create a Container Database
+  when: inventory_hostname in groups['ora-x1'] 
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  action: shell export ORACLE_HOME={{ oracle_home }}; {{ oracle_home }}/bin/dbca -silent -createDatabase -responseFile {{ silent_database21c_config_file }}
+  with_together:
+     - "{{db_properties}}"
+  tags:
+    - dbcreate_crecdb
+
+- name: Create_CDB | execute tns update for CDB database
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: '{{ stage_dir }}/tns_upd.sh {{ oracle_sid }} {{ prihost }} {{ portnum }} {{ dbunq_name }} {{ tns_path }}'
+  args:
+    executable: /bin/bash
+
+- name: Create_CDB | Check Running databases 
+  shell:  ps -ef | grep -w "ora_pmon_{{ item.cdb_name }}" |grep -v grep | sed 's/^.*pmon_//g'
+  with_items: "{{db_properties}}"
+  register: dbs
+  changed_when: False
+  tags:
+    - dbcreate_chkrunningdbs
+
+- name: Create_CDB | Add profile 
+  template: src=dbprofile.j2 dest={{ oracleuser_home }}/.profile_{{ item.0.cdb_name }} owner={{ oracle_user }} group={{ oracle_install_group }} mode=775 backup=yes
+  with_together:
+  - "{{db_properties}}"
+  - "{{dbs.results}}"
+  tags: dbcreate_dbprofile
+
+- name: Create_CDB | Modify oratab
+  when: inventory_hostname in groups['ora-x1'] 
+  remote_user: "{{ root_user }}"
+  lineinfile: dest='/etc/oratab' regexp='^{{ cdb_name }}:{{ oracle_home }}:N' line='{{ cdb_name }}:{{ oracle_home }}:Y' state=present
+  tags:
+    - dbcreate_updoratab
+
+- name: Create_CDB | execute to enable database archivelog script
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: export ORACLE_HOME={{ oracle_home }}; export ORACLE_SID={{ oracle_sid }}; export PATH=$PATH:$ORACLE_HOME/bin; echo "@{{ stage_dir }}/enable_dbarchlogs.sql;" | {{ oracle_home }}/bin/sqlplus / as sysdba
+
+- name: Create_CDB | validate CDB
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  when: inventory_hostname in groups['ora-x1']
+  shell: export ORACLE_HOME={{ oracle_home }}; export ORACLE_SID={{ cdb_name }}; export PATH=$PATH:$ORACLE_HOME/bin; echo "{{ item }};" | {{ oracle_home }}/bin/sqlplus / as sysdba
+  register: sqlplus_cdbvalidate
+  failed_when: "'ERROR' in sqlplus_cdbvalidate.stdout or sqlplus_cdbvalidate.rc != 0"
+  with_items:
+    - select name,open_mode, cdb from v\$database
+    - show pdbs
+
+- name: display CDB validation output message
+  when: inventory_hostname in groups['ora-x1']
+  debug:
+    var=sqlplus_cdbvalidate.results
+
+- name: display post install message
+  when: inventory_hostname in groups['ora-x1']
+  debug:
+    msg:
+      - 'This Steps completed below task for Single Instance at {{ansible_date_time.iso8601}}:'
+      - '- Create a SI empty Container Database on server ora-x1'
+      - '- END OF ALL: git repository "OracleDBAwithAnsible" will be updated'
+

@@ -1,0 +1,5 @@
+source ~/.bash_profile
+export ORACLE_SID={{ cdb_name }}
+export ORACLE_HOME={{ oracle_home }}
+export PATH=$PATH:$ORACLE_HOME/bin
+orapwd file=orapw{{ cdb_fname }} password={{ syspass }} force=y ignorecase=n

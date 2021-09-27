@@ -1,0 +1,76 @@
+##############################################################################
+##                                                                          ##
+##                            DBCA response file                            ##
+##                            ------------------                            ##
+## Copyright(c) Oracle Corporation 2198,2021. All rights reserved.         ##
+##                                                                          ##
+##############################################################################
+responseFileVersion=/oracle/assistants/rspfmt_dbca_response_schema_v21.0.0
+#-----------------------------------------------------------------------------
+gdbName={{ item.0.cdb_name }}
+#-----------------------------------------------------------------------------
+sid={{ item.0.cdb_name }}
+#-----------------------------------------------------------------------------
+databaseConfigType={{ item.0.dbconfig_type }}
+#-----------------------------------------------------------------------------
+createAsContainerDatabase={{ item.0.container_db}} 
+#-----------------------------------------------------------------------------
+numberOfPDBs=
+#-----------------------------------------------------------------------------
+# Name          : pdbName 
+# Datatype      : String
+# Description   : Specify the pdbname/pdbanme prefix if one or more pdb need to be created
+# Valid values  : Check Oracle12c Administrator's Guide
+# Default value : None
+# Mandatory     : No
+#-----------------------------------------------------------------------------
+pdbName=
+#-----------------------------------------------------------------------------
+# Name          : useLocalUndoForPDBs 
+# Datatype      : boolean
+# Description   : Flag to create local undo tablespace for all PDB's.
+# Valid values  : TRUE\FALSE
+# Default value : TRUE
+# Mandatory     : No
+#-----------------------------------------------------------------------------
+useLocalUndoForPDBs=
+#-----------------------------------------------------------------------------
+pdbAdminPassword=
+#-----------------------------------------------------------------------------
+templateName={{ template_name }}
+#-----------------------------------------------------------------------------
+sysPassword={{dbpasswords[item.0.cdb_name]['sys']}}
+#-----------------------------------------------------------------------------
+systemPassword={{dbpasswords[item.0.cdb_name]['system']}}
+#-----------------------------------------------------------------------------
+emExpressPort=5500
+#-----------------------------------------------------------------------------
+datafileDestination={{ item.0.dbfile_path }}
+#-----------------------------------------------------------------------------
+recoveryAreaDestination={{ item.0.fra_path }}
+#-----------------------------------------------------------------------------
+storageType={{ item.0.db_storage_type }}
+#-----------------------------------------------------------------------------
+{% if item.0.characterset is defined %}
+characterSet={{ item.0.characterset }}
+{% else %}
+characterSet=AL32UTF8
+{% endif %}
+#-----------------------------------------------------------------------------
+{% if item.0.ncharacterset is defined %}
+nationalCharacterSet={{ item.0.ncharacterset }}
+{% else %}
+nationalCharacterSet=AL16UTF16
+{% endif %}
+#-----------------------------------------------------------------------------
+listeners={{ item.0.lsnr_name }}
+#-----------------------------------------------------------------------------
+sampleSchema=
+#-----------------------------------------------------------------------------
+memoryPercentage=
+#-----------------------------------------------------------------------------
+databaseType={{ item.0.oracle_database_type }}
+#-----------------------------------------------------------------------------
+automaticMemoryManagement=false
+#-----------------------------------------------------------------------------
+totalMemory={{ item.0.totalMemory }}

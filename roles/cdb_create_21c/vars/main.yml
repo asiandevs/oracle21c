@@ -1,0 +1,43 @@
+oracle_user:                      "oracle"
+root_user:                        "root"
+oracle_install_group:             "oinstall"
+stage_dir:                        "/u01/stage"
+root_directory:                   "/u02"
+oracle_base:                     "{{ root_directory }}/app/oracle"
+oracle_home:                      "{{ oracle_base }}/product/21.3.0/db300"
+silent_database21c_config_file:   "{{ stage_dir }}/silent_21cdb_config.rsp"
+silent_database21c_config_file1:  "{{ stage_dir }}/silent_21cdb_config1.rsp"
+silent_database21c_config_file2:  "{{ stage_dir }}/silent_21cdb_config2.rsp"
+silent_listener_config_file:      "{{ stage_dir }}/silent-lsnr21c-config.rsp"
+dbfile_path: "/u01/app/oracle/oradata"
+fra_path: "/u01/app/oracle/fra"
+template_name:                    General_Purpose.dbc
+cdb_name:                         "eaymp"
+oracle_sid:                       "eaymp"
+oracleuser_home:                  "/home/{{ oracle_user }}"
+oracle_rsp_stage:                 "{{ stage_dir }}"
+syspass:                          "Oracle123"
+dbunq_name:                       eaymp
+prihost:                          ora-x1
+portnum:                          1521
+tns_path:                         "{{ oracle_home }}/network/admin"
+tns_file:                         "{{ tns_path }}/tnsnames.ora"
+db_properties:                                            
+      - home: "OraDB21Home1"                             
+        oracle_dbversion: 21.0.0.0.0                    
+        oracle_edition: EE                             
+        cdb_name: eaymp                               
+        dbconfig_type: SI                            
+        container_db: true                          
+        db_storage_type: FS                        
+        totalMemory: 1200                         
+        oracle_database_type: MULTIPURPOSE      
+        redolog_size_in_mb: 150
+        lsnr_name: LISTENER
+        state: present                         
+        dbfile_path: "/u01/app/oracle/oradata"
+        fra_path: "/u01/app/oracle/fra"
+dbpasswords:
+       eaymp:
+         sys: Oracle123
+         system: Oracle123

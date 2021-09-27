@@ -1,0 +1,18 @@
+get_sid=$(ps -ef | grep "ora_pmon_$ORACLE_DBNAME" |grep -v grep | sed 's/^.*pmon_//g')
+
+
+# Set up the Oracle environment variables
+        umask 022
+        ORACLE_BASE={{ oracle_base }}
+        export ORACLE_BASE
+        ORACLE_HOME={{ oracle_home }}
+        export ORACLE_HOME
+        SHLIB_PATH=$ORACLE_HOME/lib
+        LD_LIBRARY_PATH=$ORACLE_HOME/lib
+        export LD_LIBRARY_PATH
+        SQLPATH=/home/oracle/.sql
+        export SQLPATH
+        export ORACLE_SID=${get_sid:-$ORACLE_DBNAME}
+        export NLS_DATE_FORMAT='DD-MM-YYYY HH24:MI:SS'
+
+export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH:$SQLPATH
