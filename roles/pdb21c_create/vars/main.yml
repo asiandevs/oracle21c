@@ -1,0 +1,19 @@
+oracle_user:                     "oracle"
+root_user:                       "root"
+oracle_install_group:            "oinstall"
+stage_dir:                       "/u01/stage"
+root_directory:                  "/u02"
+scripts_directory:               "{{ root_directory }}/app/scripts"
+base_directory:                  "{{ root_directory }}/app/oracle"
+oracle_home:                     "{{ base_directory }}/product/21.3.0/db300"
+cdb_name:                        "eaymp"
+pdb_name:                        "kachu"
+pdbadmpassword:                  "Oracle123"
+prihost:                          ora-x1
+portnum:                          1521
+tns_path:                        "{{ oracle_home }}/network/admin"
+tns_file:                        "{{ tns_path }}/tnsnames.ora"
+pdb1dbfile_path:                     "/u01/app/oracle/oradata/{{ pdb_name }}"
+pdb1fra_path:                        "/u01/app/oracle/fra/{{ pdb_name }}"
+
+

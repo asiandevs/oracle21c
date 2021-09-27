@@ -1,0 +1,100 @@
+- name: pdb21c_create | display pre pdb create message
+  debug:
+    msg:
+      - 'This Steps is relate to Create a Pluggable Database on server ora-x1 at {{ansible_date_time.iso8601}}:'
+
+- name: pdb21c_create | create required directories
+  remote_user: "{{ root_user }}"
+  when: inventory_hostname in groups['ora-x1']
+  file:
+    path="{{ item }}"
+    state=directory
+    owner="{{ oracle_user }}"
+    group="{{ oracle_install_group }}"
+    mode=0755
+  with_items:
+    - "{{ stage_dir }}"
+    - "{{ pdb1dbfile_path }}"
+    - "{{ pdb1fra_path }}"
+  tags:
+    - dbcreate_crdirs
+
+- name: pdb21c_create | Copy required script to Primary database server
+  when: inventory_hostname in groups['ora-x1']
+  copy:
+    src=roles/pdb21c_create/files/{{ item }}
+    dest={{ stage_dir }}
+    owner="{{ oracle_user }}"
+    group="{{ oracle_install_group }}"
+    mode=0775
+    remote_src=no
+  with_items:
+    - tns_upd.sh
+
+- name: pdb21c_create | Create a Pluggable Database with local undo and different characterset
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  action: shell export ORACLE_HOME={{ oracle_home }}; {{ oracle_home }}/bin/dbca -silent -createPluggableDatabase -sourceDB {{ cdb_name }} -pdbName {{ pdb_name }} -pdbAdminPassword {{ pdbadmpassword }} -useLocalUndoForPDBs TRUE -characterset WE8ISO8859P1
+  tags:
+    -pdbcreate_exepdb
+
+- name: pdb21c_create | change oratab
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  lineinfile: dest='/etc/oratab' regexp='^{{ pdb_name }}:{{ oracle_home }}:N' line='{{ pdb_name }}:{{ oracle_home }}:Y'
+  tags:
+    -pdbcreate_updoratab
+
+- name: pdb21c_create | Open pluggable database in normal mode 
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: export ORACLE_HOME={{ oracle_home }}; export ORACLE_SID={{ cdb_name }}; echo "{{ item }};" | {{ oracle_home }}/bin/sqlplus / as sysdba
+  register: sqlplus_result
+  failed_when: "'ERROR' in sqlplus_result.stdout or sqlplus_result.rc != 0"
+  with_items:
+     - alter pluggable database all open
+  tags:
+    -pdbcreate_openpdb
+
+- name: pdb21c_create | execute tns update for CDB database
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: '{{ stage_dir }}/tns_upd.sh {{ pdb_name }} {{ prihost }} {{ portnum }} {{ pdb_name }} {{ tns_path }}'
+  args:
+    executable: /bin/bash
+
+- name: pdb21c_create | Remove stage directory
+  when: inventory_hostname in groups['ora-x1']
+  file: path={{ stage_dir }} state=absent
+  tags:
+    - dbdelete_removestgdir
+
+- name: pdb21c_create | validate PDB
+  remote_user: "{{ oracle_user }}"
+  when: inventory_hostname in groups['ora-x1']
+  shell: export ORACLE_HOME={{ oracle_home }}; export ORACLE_SID={{ cdb_name }}; export PATH=$PATH:$ORACLE_HOME/bin; echo "{{ item }};" | {{ oracle_home }}/bin/sqlplus / as sysdba
+  register: sqlplus_pdbvalidate 
+  with_items:
+    - select open_mode, cdb from v\$database
+    - show pdbs
+    - alter session set container={{ pdb_name }}
+    - select name, open_mode from v\$pdbs
+
+- name: display PDB validation output message
+  when: inventory_hostname in groups['ora-x1']
+  debug:
+    var: sqlplus_pdbvalidate.results
+
+- name: pdb21c_create | display post PDB create message
+  when: inventory_hostname in groups['ora-x1']
+  debug:
+    msg:
+      - 'This Steps completed below task for Single Instance at {{ansible_date_time.iso8601}}:'
+      - '- Create a Pluggable Database on server ora-x1'
+      - '- END OF ALL:  git repository will be updated'
