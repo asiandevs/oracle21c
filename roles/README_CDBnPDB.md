@@ -47,7 +47,7 @@ roles                  | tasks
    - pdb21c_create
 
 ```
-### To deploy both CDB and PDBC:
+### To deploy both CDB and PDB:
 > Enable both role 1 and role 2. Place them correctly first CDB and then PDB
 ```
 [root@oel75 Oracle21c_CDBnPDB]# cat cdb_pdb_create.yml
