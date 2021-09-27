@@ -14,7 +14,7 @@ This Ansinble playbook is for the deployment of Oracle 21c Container and Pluggab
 ## Master Playbook:
 cdb_pdb_create.yml
 
-There are three roles with this playbook: 
+There are two roles with this playbook: 
 
 roles                  | tasks
 ---------------------- | --------------------------------------------------------
