@@ -1,11 +1,14 @@
 # oracle21c
-Different database action with Ansible
+Different database tasks with Ansible
+# SI database
+### i. create an empty Container database (CDB) using role "cdb_create_21c"
+### ii. create a pluggable database (PDB) using role "pdb21c_create"
 
-# Grid Infrastructure 21c 
-### GI Software Install
-### RAC RDBMS Software Install
-### RAC Database Creation CDB & PDB
-### GI for a Standalone Server
+# Grid Infrastructure / RAC 21c 
+### i. GI Software Install
+### ii. RAC RDBMS Software Install
+### iii. RAC Database Creation CDB & PDB
+### iv. GI for a Standalone Server
 
 ## Grid Infrastructure Installation and Upgrade Guide for Linux
 https://docs.oracle.com/en/database/oracle/oracle-database/21/install-and-upgrade.html
@@ -18,21 +21,19 @@ Required Oracle Software: Download the Oracle software from OTN or MOS depending
 ```
 http://www.oracle.com/technetwork/indexes/downloads/index.html
 ```
-
 ### Setup:
  * OS: OEL 7.5 
  * Ansible: ansible 2.7.6
  * Database Version: Oracle 21.3 Linux64
 
-## Master Playbook:
-oracleGInRAC21c.yml
-
-There are three roles with this playbook: 
+## Roles
 
 roles                  | tasks
 ---------------------- | ---------------------------------
-1 racgi21c_install     | **To Install Oracle Grid Infrastructure Installation**
-2 racdbsoft21c_install | **To Install Oracle RAC software installation**
-3 racdb21c_create      | **To create Two Node RACDB ~21C**
-4 racgi_ss_21c_install | **Oracle Grid Infrastructure for a Standalone Server**
+cdb_create_21c       |  **To deploy an Empty Container Database**
+pdb21c_create        |  **To deploy pluggable database to an existing CDB**
+racgi21c_install     |  **To Install Oracle Grid Infrastructure Installation**
+racdbsoft21c_install |  **To Install Oracle RAC software installation**
+racdb21c_create      |  **To create Two Node RACDB ~21C**
+racgi_ss_21c_install |  **Oracle Grid Infrastructure for a Standalone Server**
 
