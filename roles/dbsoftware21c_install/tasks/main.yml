@@ -1,0 +1,141 @@
+---
+# =====================================================================================
+# Install Oracle Database 21.3.0 software for SI using Ansible:
+# Summary Steps:
+# (1) Check if Binaries are already installed
+# (2) Create required directories
+# (3) Unpack Oracle 21c Database Software from the local drive
+# (4) Create silent response file from template
+# (5) Install Oracle 21c Database Software for SI
+# (6) Execute root.sh on all the hosts
+# (7) validate RDBMS software
+# (8) Remove stage directory
+# =====================================================================================
+- name: SIDBSOFT_INSTALL |  display pre database software install message
+  remote_user: "{{ root_user }}"
+  debug:
+    msg:
+      - 'Oracle Database Software 21c Installation started for Single Instance at {{ansible_date_time.iso8601}}:'
+
+- name: RACDBSOFT_INSTALL | Check if Binaries are already installed
+  shell: grep "={{ oracle_home }}" {{ oracle_inventory }}/ContentsXML/inventory.xml
+  register: dbsoft_install_check
+  failed_when: false
+
+- name: SIDBSOFT_INSTALL |  create required directories
+  when: inventory_hostname in groups['dbservers']
+  remote_user: "{{ root_user }}"
+  file:
+    path="{{ item }}"
+    state=directory
+    owner="{{ oracle_user }}"
+    group="{{ oracle_install_group }}"
+    mode=0755
+  with_items:
+    - "{{ root_directory }}"
+    - "{{ scripts_directory }}"
+    - "{{ oracle_inventory }}"
+    - "{{ oracle_base }}"
+    - "{{ stage_dir }}"
+    - "{{ oracle_home }}"
+  tags:
+   - db21c_createinventory
+
+- name: SIDBSOFT_INSTALL | copy database pre install  21c rpm pfile to the target database server
+  remote_user: "{{ root_user }}"
+  copy: src=/etc/ansible/roles/dbsoftware21c_install/templates/{{ item }} dest={{ stage_dir }} owner=oracle group=oinstall mode=0775
+  with_items:
+    - oracle-database-preinstall-21c-1.0-1.el7.x86_64.rpm
+
+- name: SIDBSOFT_INSTALL | install predbinstall rpm from a local file
+  when: inventory_hostname in groups['dbservers']
+  yum:
+    name: "{{ stage_dir }}/oracle-database-preinstall-21c-1.0-1.el7.x86_64.rpm"
+    state: present
+
+- name: SIDBSOFT_INSTALL |  Setup Oracle 21c Database Software silent response file
+  when: inventory_hostname in groups['dbservers']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  template: src=roles/dbsoftware21c_install/templates/{{ oradbsoft_rsp }}.rsp.j2 dest={{ stage_dir }}/{{ oradbsoft_rsp }}.rsp mode=0755
+  tags:
+   - db21c_setuprspfile
+
+- name: SIDBSOFT_INSTALL |  Unpack Oracle 21c Database Software to the target server
+  when: inventory_hostname in groups['dbservers']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  unarchive:
+     src={{ stage_dir }}/LINUX.X64_213000_db_home.zip
+     dest="{{ oracle_home }}"
+     remote_src=no
+     mode=0775
+     group="{{ oracle_install_group }}"
+     owner="{{ oracle_user }}"
+  tags:
+   - db21c_unpackdbsoftware
+
+- name: SIDBSOFT_INSTALL |  Setup Oracle 21c Database Software silent response file
+  when: inventory_hostname in groups['dbservers']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  template: src=roles/dbsoftware21c_install/templates/{{ oradbsoft_rsp }}.rsp.j2 dest={{ stage_dir }}/{{ oradbsoft_rsp }}.rsp mode=0755
+  tags:
+   - db21c_setuprspfile
+
+- name: SIDBSOFT_INSTALL |  Install Oracle 21c Database Software
+  when: inventory_hostname in groups['dbservers']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: "{{ oracle_home }}/runInstaller -silent -responseFile {{ stage_dir }}/{{ oradbsoft_rsp }}.rsp -noconfig -ignorePrereqFailure"
+  ignore_errors: True
+  tags:
+   - db21c_installdbsoftware
+
+- name: SIDBSOFT_INSTALL |  Execute orainstroot.sh
+  when: inventory_hostname in groups['dbservers']
+  remote_user: "{{ root_user }}"
+  shell: /bin/sh "{{ oracle_inventory }}/orainstRoot.sh"
+  ignore_errors: True
+  tags:
+   - db21c_exeorainstroot
+
+- name: SIDBSOFT_INSTALL |  Execute root.sh
+  when: inventory_hostname in groups['dbservers']
+  remote_user: "{{ root_user }}"
+  shell: /bin/sh "{{ oracle_home }}/root.sh"
+  tags:
+   - db21c_exeroot
+
+- name: Get RDBMS Software Version
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  when: inventory_hostname in groups['dbservers']
+  shell: |
+       export ORACLE_HOME={{ oracle_home }}
+       {{ oracle_home }}/bin/sqlplus -version
+  register: sqlversion
+
+- name: "Output from Post Database Software Installation Check"
+  debug:
+    var: sqlversion.stdout_lines|map('trim')|list
+
+- name: SIDBSOFT_INSTALL |  Remove stage directory 
+  when: inventory_hostname in groups['dbservers']
+  file: path={{ stage_dir }} state=absent
+
+- name: SIDBSOFT_INSTALL |  display post install message
+  debug:
+    msg:
+      - 'This Steps completed below task for Single Instance at {{ansible_date_time.iso8601}}:'
+      - '- Install Single Instance Oracle Database Software'
+      - 'Next Steps left to do:'
+      - '- Create SI empty Container Database on server ora-x1'
+      - '- Create SI Pluggable Database on server ora-x1'
+      - '- Deinstall Single Instance Oracle Database Software'
+      - '- END OF ALL: this repository will be shared'

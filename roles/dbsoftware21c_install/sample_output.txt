@@ -1,0 +1,125 @@
+[root@oel75 ansible]# ansible-playbook oracle21c_rdbmssoftinstall.yml
+
+PLAY [dbservers] *****************************************************************************************************
+
+TASK [Gathering Facts] ***********************************************************************************************
+ok: [192.168.56.102]
+ok: [192.168.56.103]
+
+TASK [dbsoftware21c_install : SIDBSOFT_INSTALL |  display pre database software install message] *********************
+ok: [192.168.56.102] => {
+    "msg": [
+        "Oracle Database Software 21c Installation started for Single Instance at 2021-10-06T05:53:17Z:"
+    ]
+}
+ok: [192.168.56.103] => {
+    "msg": [
+        "Oracle Database Software 21c Installation started for Single Instance at 2021-10-06T05:53:16Z:"
+    ]
+}
+
+TASK [dbsoftware21c_install : RACDBSOFT_INSTALL | Check if Binaries are already installed] ***************************
+changed: [192.168.56.103]
+changed: [192.168.56.102]
+
+TASK [dbsoftware21c_install : SIDBSOFT_INSTALL |  create required directories] ***************************************
+ok: [192.168.56.103] => (item=/u01)
+ok: [192.168.56.102] => (item=/u01)
+ok: [192.168.56.102] => (item=/u01/app/scripts)
+ok: [192.168.56.103] => (item=/u01/app/scripts)
+changed: [192.168.56.102] => (item=/u01/app/oraInventory)
+changed: [192.168.56.103] => (item=/u01/app/oraInventory)
+changed: [192.168.56.102] => (item=/u01/app/oracle)
+changed: [192.168.56.103] => (item=/u01/app/oracle)
+ok: [192.168.56.103] => (item=/u01/stage)
+ok: [192.168.56.102] => (item=/u01/stage)
+changed: [192.168.56.102] => (item=/u01/app/oracle/product/21.3.0/db100)
+changed: [192.168.56.103] => (item=/u01/app/oracle/product/21.3.0/db100)
+
+TASK [dbsoftware21c_install : SIDBSOFT_INSTALL | copy database pre install  21c rpm pfile to the target database server] ***
+ok: [192.168.56.102] => (item=oracle-database-preinstall-21c-1.0-1.el7.x86_64.rpm)
+ok: [192.168.56.103] => (item=oracle-database-preinstall-21c-1.0-1.el7.x86_64.rpm)
+
+TASK [dbsoftware21c_install : SIDBSOFT_INSTALL | install predbinstall rpm from a local file] *************************
+ok: [192.168.56.102]
+ok: [192.168.56.103]
+
+TASK [dbsoftware21c_install : SIDBSOFT_INSTALL |  Setup Oracle 21c Database Software silent response file] ***********
+ok: [192.168.56.102]
+ok: [192.168.56.103]
+
+TASK [dbsoftware21c_install : SIDBSOFT_INSTALL |  Unpack Oracle 21c Database Software to the target server] **********
+changed: [192.168.56.103]
+changed: [192.168.56.102]
+
+TASK [dbsoftware21c_install : SIDBSOFT_INSTALL |  Setup Oracle 21c Database Software silent response file] ***********
+ok: [192.168.56.102]
+ok: [192.168.56.103]
+
+TASK [dbsoftware21c_install : SIDBSOFT_INSTALL |  Install Oracle 21c Database Software] ******************************
+fatal: [192.168.56.103]: FAILED! => {"changed": true, "cmd": "/u01/app/oracle/product/21.3.0/db100/runInstaller -silent -responseFile /u01/stage/21cEE_SoftOnly.rsp -noconfig -ignorePrereqFailure", "delta": "0:02:14.359921", "end": "2021-10-06 17:02:24.420729", "msg": "non-zero return code", "rc": 6, "start": "2021-10-06 17:00:10.060808", "stderr": "", "stderr_lines": [], "stdout": "Launching Oracle Database Setup Wizard...\n\n[WARNING] [INS-13014] Target environment does not meet some optional requirements.\n   CAUSE: Some of the optional prerequisites are not met. See logs for details. /u01/app/oraInventory/logs/InstallActions2021-10-06_05-00-10PM/installActions2021-10-06_05-00-10PM.log\n   ACTION: Identify the list of failed prerequisite checks from the log: /u01/app/oraInventory/logs/InstallActions2021-10-06_05-00-10PM/installActions2021-10-06_05-00-10PM.log. Then either from the log file or from installation manual find the appropriate configuration to meet the prerequisites and fix it manually.\nThe response file for this session can be found at:\n /u01/app/oracle/product/21.3.0/db100/install/response/db_2021-10-06_05-00-10PM.rsp\n\nYou can find the log of this install session at:\n /u01/app/oraInventory/logs/InstallActions2021-10-06_05-00-10PM/installActions2021-10-06_05-00-10PM.log\n\nAs a root user, execute the following script(s):\n\t1. /u01/app/oracle/product/21.3.0/db100/root.sh\n\nExecute /u01/app/oracle/product/21.3.0/db100/root.sh on the following nodes: \n[ora-x2]\n\n\nSuccessfully Setup Software with warning(s).", "stdout_lines": ["Launching Oracle Database Setup Wizard...", "", "[WARNING] [INS-13014] Target environment does not meet some optional requirements.", "   CAUSE: Some of the optional prerequisites are not met. See logs for details. /u01/app/oraInventory/logs/InstallActions2021-10-06_05-00-10PM/installActions2021-10-06_05-00-10PM.log", "   ACTION: Identify the list of failed prerequisite checks from the log: /u01/app/oraInventory/logs/InstallActions2021-10-06_05-00-10PM/installActions2021-10-06_05-00-10PM.log. Then either from the log file or from installation manual find the appropriate configuration to meet the prerequisites and fix it manually.", "The response file for this session can be found at:", " /u01/app/oracle/product/21.3.0/db100/install/response/db_2021-10-06_05-00-10PM.rsp", "", "You can find the log of this install session at:", " /u01/app/oraInventory/logs/InstallActions2021-10-06_05-00-10PM/installActions2021-10-06_05-00-10PM.log", "", "As a root user, execute the following script(s):", "\t1. /u01/app/oracle/product/21.3.0/db100/root.sh", "", "Execute /u01/app/oracle/product/21.3.0/db100/root.sh on the following nodes: ", "[ora-x2]", "", "", "Successfully Setup Software with warning(s)."]}
+...ignoring
+fatal: [192.168.56.102]: FAILED! => {"changed": true, "cmd": "/u01/app/oracle/product/21.3.0/db100/runInstaller -silent -responseFile /u01/stage/21cEE_SoftOnly.rsp -noconfig -ignorePrereqFailure", "delta": "0:02:42.308580", "end": "2021-10-06 17:02:52.975672", "msg": "non-zero return code", "rc": 6, "start": "2021-10-06 17:00:10.667092", "stderr": "", "stderr_lines": [], "stdout": "Launching Oracle Database Setup Wizard...\n\n[WARNING] [INS-13014] Target environment does not meet some optional requirements.\n   CAUSE: Some of the optional prerequisites are not met. See logs for details. /u01/app/oraInventory/logs/InstallActions2021-10-06_05-00-10PM/installActions2021-10-06_05-00-10PM.log\n   ACTION: Identify the list of failed prerequisite checks from the log: /u01/app/oraInventory/logs/InstallActions2021-10-06_05-00-10PM/installActions2021-10-06_05-00-10PM.log. Then either from the log file or from installation manual find the appropriate configuration to meet the prerequisites and fix it manually.\nThe response file for this session can be found at:\n /u01/app/oracle/product/21.3.0/db100/install/response/db_2021-10-06_05-00-10PM.rsp\n\nYou can find the log of this install session at:\n /u01/app/oraInventory/logs/InstallActions2021-10-06_05-00-10PM/installActions2021-10-06_05-00-10PM.log\n\nAs a root user, execute the following script(s):\n\t1. /u01/app/oracle/product/21.3.0/db100/root.sh\n\nExecute /u01/app/oracle/product/21.3.0/db100/root.sh on the following nodes: \n[ora-x1]\n\n\nSuccessfully Setup Software with warning(s).", "stdout_lines": ["Launching Oracle Database Setup Wizard...", "", "[WARNING] [INS-13014] Target environment does not meet some optional requirements.", "   CAUSE: Some of the optional prerequisites are not met. See logs for details. /u01/app/oraInventory/logs/InstallActions2021-10-06_05-00-10PM/installActions2021-10-06_05-00-10PM.log", "   ACTION: Identify the list of failed prerequisite checks from the log: /u01/app/oraInventory/logs/InstallActions2021-10-06_05-00-10PM/installActions2021-10-06_05-00-10PM.log. Then either from the log file or from installation manual find the appropriate configuration to meet the prerequisites and fix it manually.", "The response file for this session can be found at:", " /u01/app/oracle/product/21.3.0/db100/install/response/db_2021-10-06_05-00-10PM.rsp", "", "You can find the log of this install session at:", " /u01/app/oraInventory/logs/InstallActions2021-10-06_05-00-10PM/installActions2021-10-06_05-00-10PM.log", "", "As a root user, execute the following script(s):", "\t1. /u01/app/oracle/product/21.3.0/db100/root.sh", "", "Execute /u01/app/oracle/product/21.3.0/db100/root.sh on the following nodes: ", "[ora-x1]", "", "", "Successfully Setup Software with warning(s)."]}
+...ignoring
+
+TASK [dbsoftware21c_install : SIDBSOFT_INSTALL |  Execute orainstroot.sh] ********************************************
+fatal: [192.168.56.102]: FAILED! => {"changed": true, "cmd": "/bin/sh \"/u01/app/oraInventory/orainstRoot.sh\"", "delta": "0:00:00.005730", "end": "2021-10-06 17:02:53.769220", "msg": "non-zero return code", "rc": 127, "start": "2021-10-06 17:02:53.763490", "stderr": "/bin/sh: /u01/app/oraInventory/orainstRoot.sh: No such file or directory", "stderr_lines": ["/bin/sh: /u01/app/oraInventory/orainstRoot.sh: No such file or directory"], "stdout": "", "stdout_lines": []}
+...ignoring
+fatal: [192.168.56.103]: FAILED! => {"changed": true, "cmd": "/bin/sh \"/u01/app/oraInventory/orainstRoot.sh\"", "delta": "0:00:00.005401", "end": "2021-10-06 17:02:53.167156", "msg": "non-zero return code", "rc": 127, "start": "2021-10-06 17:02:53.161755", "stderr": "/bin/sh: /u01/app/oraInventory/orainstRoot.sh: No such file or directory", "stderr_lines": ["/bin/sh: /u01/app/oraInventory/orainstRoot.sh: No such file or directory"], "stdout": "", "stdout_lines": []}
+...ignoring
+
+TASK [dbsoftware21c_install : SIDBSOFT_INSTALL |  Execute root.sh] ***************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [dbsoftware21c_install : Get RDBMS Software Version] ************************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [dbsoftware21c_install : Output from Post Database Software Installation Check] *********************************
+ok: [192.168.56.102] => {
+    "sqlversion.stdout_lines|map('trim')|list": [
+        "",
+        "SQL*Plus: Release 21.0.0.0.0 - Production",
+        "Version 21.3.0.0.0"
+    ]
+}
+ok: [192.168.56.103] => {
+    "sqlversion.stdout_lines|map('trim')|list": [
+        "",
+        "SQL*Plus: Release 21.0.0.0.0 - Production",
+        "Version 21.3.0.0.0"
+    ]
+}
+
+TASK [dbsoftware21c_install : SIDBSOFT_INSTALL |  Remove stage directory] ********************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [dbsoftware21c_install : SIDBSOFT_INSTALL |  display post install message] **************************************
+ok: [192.168.56.102] => {
+    "msg": [
+        "This Steps completed below task for Single Instance at 2021-10-06T05:53:17Z:",
+        "- Install Single Instance Oracle Database Software",
+        "Next Steps left to do:",
+        "- Create SI empty Container Database on server ora-x1",
+        "- Create SI Pluggable Database on server ora-x1",
+        "- Deinstall Single Instance Oracle Database Software",
+        "- END OF ALL: this repository will be shared"
+    ]
+}
+ok: [192.168.56.103] => {
+    "msg": [
+        "This Steps completed below task for Single Instance at 2021-10-06T05:53:16Z:",
+        "- Install Single Instance Oracle Database Software",
+        "Next Steps left to do:",
+        "- Create SI empty Container Database on server ora-x1",
+        "- Create SI Pluggable Database on server ora-x1",
+        "- Deinstall Single Instance Oracle Database Software",
+        "- END OF ALL: this repository will be shared"
+    ]
+}
+
+PLAY RECAP ***********************************************************************************************************
+192.168.56.102             : ok=16   changed=8    unreachable=0    failed=0
+192.168.56.103             : ok=16   changed=8    unreachable=0    failed=0
