@@ -1,4 +1,4 @@
-# Oracle 21c - Create a SI Physical Standby database and serup Data Guard broker using Ansible playbook
+# Oracle 21c - Create a SI Physical Standby database and setup Data Guard broker using Ansible playbook
 
 This Ansinble playbook is for creating a physical standby using existing primary database.
 ![image](https://user-images.githubusercontent.com/37457408/136183041-e31358c7-c935-43cc-9529-cf302f20ad3d.png)
