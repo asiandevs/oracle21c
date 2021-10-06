@@ -30,7 +30,7 @@ http://www.oracle.com/technetwork/indexes/downloads/index.html
 
 roles                  | tasks
 ---------------------- | ---------------------------------
-bsoftware21c_install |  **To Install Oracle SI database Software**
+dbsoftware21c_install |  **To Install Oracle SI database Software**
 cdb_create_21c       |  **To deploy an empty Container Database (CDB)**
 pdb21c_create        |  **To deploy pluggable database (PDB) to an existing CDB**
 sbdb21c_create       |  **To create a physical Standby database and setup Data Guard Broker**
