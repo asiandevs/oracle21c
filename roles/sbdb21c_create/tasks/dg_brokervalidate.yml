@@ -1,0 +1,58 @@
+---
+# ===========================================================
+# Summary Steps:
+# (1) Validate Data Guard Broker Status using dgmgrl 
+# ===========================================================
+      - name: "Execute dgmgrl show configuration command"
+        become: yes
+        become_user: oracle
+        shell: "{{ oracle_home }}/bin/dgmgrl / 'show configuration' |grep 'database' | awk -F- '{print $1 }'"
+        args:
+          chdir: "{{ oracle_home }}/bin"
+        register: dgmgrl_conf
+        environment:
+          ORACLE_HOME: "{{ oracle_home }}"
+          ORACLE_SID: "{{ prdbunq_name }}"
+
+#      - debug:
+#          msg: "{{ dgmgrl_conf }}"
+
+      - set_fact:
+          db_list: "{{ dgmgrl_conf.stdout_lines|map('trim')|list }}"
+
+      - debug:
+          var: db_list
+
+      - set_fact:
+          primarydb: "{{ db_list.0 }}"
+          standbydb: "{{ db_list.1 }}"
+
+#      - debug:
+#          msg: "Primary database – {{ primarydb }}, Standby database – {{ standbydb }} "
+#        when: inventory_hostname in groups['ora-x1']
+
+      - name: "Execute dgmgrl show configuration command"
+        become: yes
+        become_user: oracle
+        shell: sleep 5
+
+      - name: "Execute dgmgrl show configuration command"
+        become: yes
+        become_user: oracle
+        shell: "{{ oracle_home }}/bin/dgmgrl / 'show database {{db_list.1}}' |grep 'Lag'|sort |awk '{print $1 $2 $3  $4}'"
+        register: dgmgrl_status
+        environment:
+          ORACLE_HOME: "{{ oracle_home }}"
+          ORACLE_SID: "{{ prdbunq_name }}"
+
+      - debug:
+          msg:
+            - "Primary database – {{ primarydb }}, Standby database – {{ standbydb }} "
+            - "{{ dgmgrl_status.stdout_lines }}"
+
+#        vars:
+#          dgmgr1_conf: []
+#          syspass: "Oracle123"
+#          oracle_home: "{{ oracle_home }}"
+#          root_user: root
+#          oracle_user: oracle

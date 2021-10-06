@@ -1,0 +1,108 @@
+#!/bin/sh
+#set -vx
+
+usage () {
+echo "
+Purpose       : $0
+Prerequisite  : Both Primary Physical Standby Databases must be up and running in good condition
+Usage         : $0 [h|o]
+Flags         : 'o' is option to choose from (switchover|convertphytosnap|convertsnaptophy|sbdbstatus)  
+Examples      : $0 switchover
+               Show usage
+               $0 -h
+"
+}
+			   
+password={{ password_sys }}
+logfile=/{{ log_dir }}
+export ORAENV_ASK=NO
+export ORACLE_SID=`ps -eo args|grep ora_smon|grep -v grep|awk -F"_smon_" '{print $2}'`
+. /usr/local/bin/oraenv
+export LD_LIBRARY_PATH={{ oracle_home }}/lib
+rm -rf /{{ log_dir }}
+OPEN_MODE=`dgmgrl -echo << EOF
+connect sys/${password}@${ORACLE_SID}
+show configuration
+exit
+EOF`
+echo "$OPEN_MODE"  >> $logfile
+for DBR in `egrep 'Primary|Physical|Snapshot' /{{ log_dir }} |sort |awk -F" " '{print $3 $1}'`
+do
+if [ "`echo $DBR|awk '{print substr($1,1,7)}'`" == "Primary" ]
+then
+PRIDB=`echo $DBR|awk '{print substr($1,8)}'`
+#echo "primary database is $PRIDB"
+fi
+if [ "`echo $DBR|awk '{print substr($1,1,8)}'`" == "Physical" ]
+then
+SBDB=`echo $DBR|awk '{print substr($1,9)}'`
+#echo "standby database is $SBDB"
+fi
+if [ "`echo $DBR|awk '{print substr($1,1,8)}'`" == "Snapshot" ]
+then
+SSDB=`echo $DBR|awk '{print substr($1,9)}'`
+#echo "standby database is $SSDB"
+fi
+done
+
+switchover() {
+    echo "Switchover Database"
+    {{ oracle_home }}/bin/dgmgrl -echo << END
+    connect sys/{{ password_sys }}@'$PRIDB'
+    switchover to $SBDB  
+    exit
+END
+}
+ 
+convertsnaptophy() {
+    echo "Convert snapshot standby to physical standby"
+    {{ oracle_home }}/bin/dgmgrl -echo << END
+    connect sys/{{ password_sys }}@'$PRIDB'
+    convert database '$SSDB' to physical standby  
+    exit
+END
+}
+
+convertphytosnap() {
+    echo "Convert physical standby to snapshot standby"
+    {{ oracle_home }}/bin/dgmgrl -echo << END
+    connect sys/{{ password_sys }}@$SBDB
+    convert database '$SBDB' to snapshot standby  
+    exit
+END
+}
+ 
+sbdbstatus() {
+    echo "physical standby database status"
+    sleep 30
+    {{ oracle_home }}/bin/dgmgrl -echo << END
+    connect sys/{{ password_sys }}@'$PRIDB'
+    show configuration verbose 
+    exit
+END
+} 
+
+case "$1" in
+    switchover)
+        switchover
+		sbdbstatus
+        ;;
+    convertphytosnap)
+        convertphytosnap
+		sbdbstatus
+        ;;
+    convertsnaptophy)
+        convertsnaptophy
+		sbdbstatus
+        ;;
+    sbdbstatus)
+        sbdbstatus
+        ;;
+    h)  
+     usage
+       ;;
+    *)
+        echo $"Usage: $0 {switchover|convertphytosnap|convertsnaptophy|sbdbstatus|h}"
+        exit 1
+esac   
+exit $? 

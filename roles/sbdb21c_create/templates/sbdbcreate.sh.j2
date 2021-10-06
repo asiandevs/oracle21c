@@ -1,0 +1,10 @@
+export ORACLE_HOME={{ oracle_home }}
+export PATH=$PATH:$ORACLE_HOME/bin
+{{ oracle_home }}/bin/dbca -silent -createDuplicateDB \
+-gdbName {{ prdbunq_name }} \
+-sid {{ sbdbunq_name }} \
+-sysPassword {{ password_sys }} \
+-primaryDBConnectionString {{ prihost }}:1521/{{ prdbunq_name }} \
+-createAsStandby -dbUniqueName {{ sbdbunq_name }} \
+-datafileDestination {{ db_createfile_path }} \
+-initParams db_create_file_dest={{ db_createfile_path }}, db_create_online_log_dest_1={{ db_recofile_dest }}

@@ -1,0 +1,46 @@
+#!/bin/bash
+
+######################################
+### add or modify tnsnames_entry.sh ##
+############################ #########
+
+export ORACLE_HOME={{ oracle_home }}
+export TNSNAMES_FILE={{ tns_file }}
+export PR_TNS={{ oracle_prsid }}
+export SB_TNS={{ oracle_sbsid }}
+export PR_TNS_LOCAL={{ oracle_prsid }}
+export SB_TNS_LOCAL={{ oracle_prsid }}
+export PR_HOST={{ prihost }}
+export SB_HOST={{ sbhost }}
+export PORT_NUM={{ portnum }}
+export PR_SRV_NAME={{ prdbunq_name }}
+export SB_SRV_NAME={{ sbdbunq_name }}
+export TNS_ADMIN_DIR={{ tns_path }}
+
+chk_entry=`cat {{ tns_path }}/{{ tns_file }} | grep "{{ oracle_prsid }} =" | wc -l`
+
+if [ -n "$chk_entry" ] && [ "$chk_entry" = 0 ]; then
+
+  echo "Creating the required entry..."
+  echo ""
+
+echo "
+{{ oracle_prsid }} =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = {{ PR_HOST }})(PORT = {{ PORT }}))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = {{ prdbunq_name }})
+    )
+  )
+" >> {{ tns_path }}/{{ tns_file }}
+
+   elif [ "$chk_entry" != 0 ]; then
+
+   echo ""
+  echo "This entry {{ prdbunq_name }} already exists"
+  echo "Nothing to do!"
+  echo ""
+   exit;
+  
+fi 

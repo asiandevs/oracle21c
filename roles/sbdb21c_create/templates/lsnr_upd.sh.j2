@@ -1,0 +1,38 @@
+#!/bin/bash
+export ORACLE_HOME= {{ oracle_home }}
+export LSNR_FILE= {{ stlsnr_file }}
+export ENTRY_NAME= {{ oracle_sbsid }}
+export TNS_ADMIN_DIR= {{ tns_path }}
+
+export TARGET_SID=`echo {{ oracle_sbsid }} | tr '[:lower:]' '[:upper:]'`
+
+chk_entry=`cat {{ tns_path }}/{{ stlsnr_file }} | grep "SID_LIST_LISTENER  =" | wc -l`
+
+if [ -n "$chk_entry" ] && [ "$chk_entry" = 0 ]; then
+
+  echo "Creating the required entry..."
+  echo ""
+
+echo "
+SID_LIST_LISTENER =
+  (SID_LIST =
+    (SID_DESC =
+      (GLOBAL_DBNAME = "$TARGET_SID"_DGMGRL)
+      (ORACLE_HOME = {{ oracle_home }})
+      (SID_NAME = {{ oracle_prsid }})
+    )
+  )
+
+ADR_BASE_LISTENER = {{ base_directory }}
+
+" >> {{ tns_path }}/{{ stlsnr_file }}
+
+   elif [ "$chk_entry" != 0 ]; then
+
+  echo ""
+  echo "This entry already exists: SID_LIST_LISTENER."
+  echo "Nothing to do!"
+  echo ""
+   exit;
+
+fi

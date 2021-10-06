@@ -1,0 +1,33 @@
+---
+# ===========================================================
+# Summary Steps:
+# (1) Validate Physical Standby Database
+# ===========================================================
+      - name: Get Primary Database Information
+        remote_user: "{{ root_user }}"
+        become: yes
+        become_user: oracle
+        when: inventory_hostname in groups['ora-x1']
+        shell: export ORACLE_HOME={{ oracle_home }}; export ORACLE_SID={{ oracle_prsid }}; export PATH=$PATH:$ORACLE_HOME/bin; echo "{{ item }};" | {{ oracle_home }}/bin/sqlplus / as sysdba
+        register: prisqloutput
+        with_items:
+        - SELECT DATABASE_ROLE, OPEN_MODE, DATAGUARD_BROKER FROM v\$database
+
+      - name: display details of primary databse
+        debug: msg="{{ item }}"
+        with_items: "{{ prisqloutput.results|map(attribute='stdout')|list }}"
+
+      - name: Get Standby Database Information
+        remote_user: "{{ root_user }}"
+        become: yes
+        become_user: oracle
+        when: inventory_hostname in groups['ora-x2']
+        shell: export ORACLE_HOME={{ oracle_home }}; export ORACLE_SID={{ oracle_sbsid }}; export PATH=$PATH:$ORACLE_HOME/bin; echo "{{ item }};" | {{ oracle_home }}/bin/sqlplus / as sysdba
+        register: sbsqloutput
+        with_items:
+        - SELECT DATABASE_ROLE, OPEN_MODE, DATAGUARD_BROKER FROM v\$database
+
+      - name: display details of standby database
+        debug: msg="{{ item }}"
+        with_items: "{{ sbsqloutput.results|map(attribute='stdout')|list }}"
+

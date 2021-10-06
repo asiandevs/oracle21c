@@ -1,0 +1,8 @@
+source ~/.bash_profile
+export ORACLE_SID={{ oracle_prsid }}
+export ORACLE_HOME={{ oracle_home }}
+export PATH=$PATH:$ORACLE_HOME/bin
+
+cd {{ stage_dir }}
+sqlplus -s sys as sysdba @redologs.sql
+exit

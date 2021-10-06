@@ -1,0 +1,31 @@
+---
+# ===========================================================
+# Summary Steps:
+# (1) Setup Data Guard Broker
+# ===========================================================
+- name: Create_standbyDB | execute postsql from the standby database
+  when: inventory_hostname in groups['ora-x2']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: export ORACLE_HOME={{ oracle_home }}; export ORACLE_SID={{ oracle_sbsid }}; export PATH=$PATH:$ORACLE_HOME/bin; echo "@{{ stage_dir }}/postcrsb.sql;" | {{ oracle_home }}/bin/sqlplus / as sysdba
+  tags:
+   - db21c_sbexepsql
+
+- name: Create_standbyDB | execute broker Setup from the Primary Database
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: export ORACLE_HOME={{ oracle_home }}; export ORACLE_SID={{ oracle_prsid }}; export PATH=$PATH:$ORACLE_HOME/bin; echo "@{{ stage_dir }}/postcrpr.sql;" | {{ oracle_home }}/bin/sqlplus / as sysdba
+  tags:
+   - db21c_prexepsql
+
+- name: display post install message
+  when: inventory_hostname in groups['ora-x1']
+  debug:
+    msg:
+      - 'This Steps completed below task for Single Instance at {{ansible_date_time.iso8601}}:'
+      - '- Data Guard Broker setup is completed'
+      - '- Next we will validate Data Guard broker setup'
+

@@ -1,0 +1,220 @@
+---
+# =====================================================================================
+# Summary Steps:
+# (1) Create required directories both for the primary and standby database servers
+# (2) Add entry for tns and static listener 
+# (3) Create necessary templates for creating a physical Standby database
+# (4) Change and configure required database parameters in Primary Side
+# =====================================================================================
+- name: Create LogFile  Directory
+  file:
+   path: /tmp/tstgrade/{{ oracle_sbsid }}
+   state: directory
+   owner: "{{ oracle_user }}"
+   group: "{{ oracle_install_group }}"
+
+- name: Create_standbyDB | create required directories on standby database server
+  when: inventory_hostname in groups['ora-x2']
+  file:
+    path="{{ item }}"
+    state=directory
+    owner="{{ oracle_user }}"
+    group="{{ oracle_install_group }}"
+    mode=0775
+  with_items:
+    - "{{ stage_dir }}"
+    - "{{ log_dir }}"
+    - "{{ db_createfile_path }}/{{ oracle_sbsid }}"
+    - "{{ db_recofile_dest }}/{{ oracle_sbsid }}"
+    - "{{ db_recofile_dest }}/{{ oracle_sbsid }}/pdbseed"
+  tags:
+   - db21c_crsbdirs
+
+- name: Create_standbyDB | create required directories on Primary database server
+  when: inventory_hostname in groups['ora-x1']
+  file:
+    path="{{ item }}"
+    state=directory
+    owner="{{ oracle_user }}"
+    group="{{ oracle_install_group }}"
+    mode=0775
+  with_items:
+    - "{{ stage_dir }}"
+    - "{{ log_dir }}"
+    - "{{ db_recofile_dest }}/{{ oracle_prsid }}"
+  tags:
+   - db21c_crprdirs
+
+- name: Create_standbyDB | Copy required script to Primary database server
+  when: inventory_hostname in groups['ora-x1']
+  copy:
+    src=roles/sbdb21c_create/files/{{ item }}
+    dest={{ stage_dir }}
+    owner="{{ oracle_user }}"
+    group="{{ oracle_install_group }}"
+    mode=0775
+    remote_src=no
+  with_items:
+    - chkexistdg.sql
+    - gensbredologs.sql
+    - postcrpr.sql
+    - dg_status.sql
+    - tns_upd.sh
+    - add_staticlsnr.sh
+  tags:
+   - db21c_sbcpredo
+
+- name: Create_standbyDB | Copy database SQL script to standby database server
+  when: inventory_hostname in groups['ora-x2']
+  copy:
+    src=roles/sbdb21c_create/files/{{ item }}
+    dest={{ stage_dir }}
+    owner="{{ oracle_user }}"
+    group="{{ oracle_install_group }}"
+    mode=0755
+    remote_src=no
+  with_items:
+    - postcrsb.sql
+    - tns_upd.sh
+    - dg_status.sql
+    - add_staticlsnr.sh
+  tags:
+   - db21c_sbcpsql
+
+- name: Create_standbyDB | template for create dg_role modify script
+  when: inventory_hostname in groups['dbservers']
+  remote_user: "{{ root_user }}"
+  template: src=roles/sbdb21c_create/templates/dgrole_modify.sh.j2 dest={{ stage_dir }}/dgrole_modify.sh owner="{{ oracle_user }}" group="{{ oracle_install_group }}" force=yes mode=0775
+  tags:
+   - db21c_sbtmpsql
+
+- name: Create_standbyDB | template for postsql on standby database
+  when: inventory_hostname in groups['ora-x2']
+  remote_user: "{{ root_user }}"
+  template: src=roles/sbdb21c_create/templates/postcrsb.sh.j2 dest={{ stage_dir }}/postcrsb.sql owner="{{ oracle_user }}" group="{{ oracle_install_group }}" force=yes mode=0775
+  tags:
+   - db21c_sbtmpsql
+
+- name: Create_standbyDB | template for postsql on primary database
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  template: src=roles/sbdb21c_create/templates/postcrpr.sh.j2 dest="{{ stage_dir }}/postcrpr.sql" owner="{{ oracle_user }}" group="{{ oracle_install_group }}" force=yes mode=0775
+  tags:
+   - db21c_sbtmpsql
+
+- name: Create_standbyDB | template for physical standby using dbca
+  when: inventory_hostname in groups['ora-x2']
+  remote_user: "{{ root_user }}"
+  template: src=roles/sbdb21c_create/templates/sbdbcreate.sh.j2 dest={{ stage_dir }}/sbdbcreate.sh owner="{{ oracle_user }}" group="{{ oracle_install_group }}" mode=0775
+  tags:
+   - db21c_sbdbcarsp
+
+- name: Create_standbyDB | create silent listener config file on SB Host
+  when: inventory_hostname in groups['ora-x2']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  template:
+    src=roles/sbdb21c_create/templates/listener.rsp.21c.j2
+    dest={{ stage_dir }}/silent-lsnr21c-config.rsp
+    remote_src=no
+    owner="{{ oracle_user }}"
+    group="{{ oracle_install_group }}"
+    mode=0775
+  register: lsnr_cfgsb
+  tags:
+    - dbcreate_lsnrcfg
+
+- name: Create_standbyDB | Configuring listener on SB Host
+  when: inventory_hostname in groups['ora-x2']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  action: shell export ORACLE_HOME={{ oracle_home }}; $ORACLE_HOME/bin/netca -silent -responseFile {{ silent_listener_config_file }}
+  ignore_errors: True
+  tags:
+    - dbcreate_execlsnrcfg
+
+- name: Create_standbyDB | execute tns update for primary database
+  when: inventory_hostname in groups['dbservers']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: '{{ stage_dir }}/tns_upd.sh {{ oracle_prsid }} {{ prihost }} {{ portnum }} {{ prdbunq_name }} {{ tns_path }} {{ oracle_home }}'
+  args:
+    executable: /bin/bash
+
+- name: Create_standbyDB | execute tns update for standby database
+  when: inventory_hostname in groups['dbservers']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: '{{ stage_dir }}/tns_upd.sh {{ oracle_sbsid }} {{ sbhost }} {{ portnum }} {{ sbdbunq_name }} {{ tns_path }} {{ oracle_home }}'
+  args:
+    executable: /bin/bash
+
+- name: Create_standbyDB | add static listener 
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: '{{ stage_dir }}/add_staticlsnr.sh {{ oracle_prsid }}_DGMGRL {{ oracle_prsid }} {{ lsnr_name }} {{ tns_path }} {{ oracle_home }}'
+  args:
+    executable: /bin/bash
+
+- name: Create_standbyDB | add static listener 
+  when: inventory_hostname in groups['ora-x2']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: '{{ stage_dir }}/add_staticlsnr.sh {{ oracle_sbsid }}_DGMGRL {{ oracle_sbsid }} {{ lsnr_name }} {{ tns_path }} {{ oracle_home }}'
+  args:
+    executable: /bin/bash
+
+- name: Create_standbyDB | reload listener on primary host
+  when: inventory_hostname in groups['dbservers']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  action: shell export ORACLE_HOME={{ oracle_home }}; $ORACLE_HOME/bin/lsnrctl reload {{ lsnr_name }}
+  ignore_errors: True
+  tags:
+    - dbcreate_execlsnrcfg
+
+- name: Create_standbyDB | Setup force logging Parameter
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: export ORACLE_HOME={{ oracle_home }}; export ORACLE_SID={{ oracle_prsid }}; echo "{{ item }};" | {{ oracle_home }}/bin/sqlplus / as sysdba
+  register: sqlplus_force logging_result
+  with_items:
+    - alter database force logging
+  tags:
+   - db21c_prflog
+
+- name: Create_standbyDB | Ensure archiving is set to Fast Recovery Area on the primary
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: export ORACLE_HOME={{ oracle_home }}; export ORACLE_SID={{ oracle_prsid }}; echo "{{ item }};" | {{ oracle_home }}/bin/sqlplus / as sysdba
+  with_items:
+    - alter system set log_archive_dest_1='location={{ db_recofile_path }} valid_for=(ALL_LOGFILES,ALL_ROLES) db_unique_name={{ prdbunq_name }}'
+  tags:
+   - db21c_prarchiving
+
+- name: Create_standbyDB | execute standby redologs script
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: export ORACLE_HOME={{ oracle_home }}; export ORACLE_SID={{ oracle_prsid }}; export PATH=$PATH:$ORACLE_HOME/bin; echo "@{{ stage_dir }}/gensbredologs.sql;" | {{ oracle_home }}/bin/sqlplus / as sysdba
+
+- name: display prep configuration message
+  when: inventory_hostname in groups['ora-x1']
+  debug:
+    msg:
+      - 'This Steps completed below task for Single Instance at {{ansible_date_time.iso8601}}:'
+      - '- Create a Physical Standby Database pre configuration task completed'
+      - '-  Next task is to create Physical Standby database'

@@ -1,0 +1,25 @@
+# =====================================================================================
+# Summary Step:
+# (1) Check current Data Guard Setup for this SID
+# =====================================================================================
+      - name: check if any Data Guard Setup already exist
+        remote_user: "{{ root_user }}"
+        become: yes
+        become_user: oracle
+        when: inventory_hostname in groups['ora-x1']
+        shell: export ORACLE_HOME={{ oracle_home }}; export ORACLE_SID={{ oracle_prsid }}; export PATH=$PATH:$ORACLE_HOME/bin; echo "@{{ stage_dir }}/chkexistdg.sql;" | {{ oracle_home }}/bin/sqlplus / as sysdba
+        register: result  # failed_when: oracle_sbsid in result.stdout_lines
+        ignore_errors: true
+
+      - name: failed message details
+        fail:
+         msg: "Dataguarad Setup already exist for this database - '{{ oracle_sbsid }}'. Define a different target database"
+        when: oracle_sbsid in result.stdout_lines
+
+#        vars:
+#          syspass: "{{ password_sys }}"
+#          oracle_home: "{{ oracle_home }}"
+#          oracle_prsid:                    "{{ prdbunq_name }}"
+#          oracle_sbsid:                    "{{ sbdbunq_name }}"
+
+  

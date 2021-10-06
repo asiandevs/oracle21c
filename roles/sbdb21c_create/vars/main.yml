@@ -1,0 +1,33 @@
+oracle_user:                     "oracle"
+root_user:                       "root"
+grid_user:                       grid
+oracle_install_group:            "oinstall"
+root_directory:                  "/u01"
+scripts_directory:               "{{ root_directory }}/app/scripts"
+base_directory:                  "{{ root_directory }}/app/oracle"
+oracle_home:                     "{{ base_directory }}/product/21.3.0/db100"
+prihost:                         ora-x1 
+prdbunq_name:                    eaymp  
+sbhost:                          ora-x2 
+sbdbunq_name:                    pmjks  
+db_recofile_path:                USE_DB_RECOVERY_FILE_DEST
+password_sys:                    "Oracle123"
+db_createfile_path:              "/u01/app/oracle/oradata" 
+oracle_prsid:                    eaymp
+oracle_sbsid:                    pmjks
+db_recofile_dest:                "/u01/app/oracle/redo" 
+oratab:                          /etc/oratab
+stage_dir:                       "/u01/stage"
+log_dir:                         "/u01/stage/logs"
+silent_listener_config_file:     "{{ stage_dir }}/silent-lsnr21c-config.rsp"
+lsnr_home: "{{ base_directory }}/homes/OraDB21Home1"
+tns_path: "{{ lsnr_home }}/network/admin"
+tns_file: "{{ tns_path }}/tnsnames.ora"
+stlsnr_file: "{{ tns_path }}/listener.ora"
+lsnr_name: LISTENER
+portnum: 1521
+env_db:
+  ORACLE_HOME: "{{ oracle_home }}"
+  ORACLE_BASE: "{{ base_directory }}"
+  PATH: "{{ oracle_home }}/bin:{{ oracle_home }}/OPatch:$PATH:/bin:/usr/bin:/usr/local/bin:/usr/ccs/bin:/usr/sbin"
+

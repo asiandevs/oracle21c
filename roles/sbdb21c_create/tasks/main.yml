@@ -1,0 +1,50 @@
+---
+# =====================================================================================
+# Create Oracle Database 21.3.0 SI Physical Standby database using Ansible playbook:
+# =====================================================================================
+        - name: display pre install message before creating of Physical Standby
+          when: inventory_hostname in groups['ora-x1']
+          debug:
+            msg:
+              - 'Creating Physical Standby Database for Single Instance {{ oracle_prsid }} at {{ansible_date_time.iso8601}}:'
+        
+        - name:  Create_standbyDB | Check if physical Standby setup already exist
+          include: dg_existchk.yml
+          tags: dg_setupexist
+          when: inventory_hostname in groups['ora-x1']
+
+        - name: Create_standbyDB | Prep for creating  a Physical Standby Database
+          include: dg_prep_psb.yml
+          tags: pre_tasks_creaphysb
+
+        - name: Create_standbyDB | Create a Physical Standby Database
+          when: inventory_hostname in groups['ora-x2']
+          remote_user: "{{ root_user }}"
+          become: yes
+          become_user: "{{ oracle_user }}"
+          shell: '{{ stage_dir }}/sbdbcreate.sh'
+          args:
+            executable: /bin/bash
+
+        - name:  Create_standbyDB | validate physical standby database configuration
+          include: dg_sbvalidate.yml
+          tags: dgbroker_status
+
+        - name: Create_standbyDB | Setup Data Guard broker configuration
+          include: dg_brokersetup.yml
+          tags: dgbroker_setup
+
+        - name:  Create_standbyDB | validate DG broker status
+          include: dg_brokervalidate.yml
+          tags: dgbroker_status
+          when: inventory_hostname in groups['ora-x1']
+
+        - name: display post install message after creating of Physical Standby
+          when: inventory_hostname in groups['ora-x1']
+          debug:
+            msg:
+              - 'Following tasks are completed for Single Instance at {{ansible_date_time.iso8601}}:'
+              - '- Create a Physical Standby Database is completed on server ora-x2'
+              - '- Setup Data Guard Broker configuration'
+              - '- END OF ALL: git repository "PhysicalStandbyWithDGBroker" will be shared'
+
