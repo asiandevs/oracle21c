@@ -1,5 +1,11 @@
 # oracle21c
 Different database tasks with Ansible
+
+```diff
+- NOTE
+! Please do modify based on your own setup. This is purely based on my own lab setup.
+```
+
 # SI database
 ### i. create an empty Container database (CDB) using role "cdb_create_21c"
 ### ii. create a pluggable database (PDB) using role "pdb21c_create"
@@ -39,3 +45,9 @@ racdbsoft21c_install |  **To Install Oracle RAC software installation**
 racdb21c_create      |  **To create Two Node RACDB ~21C**
 racgi_ss_21c_install |  **Oracle Grid Infrastructure for a Standalone Server**
 oracleclient21c_install| **Deployment of Oracle Database 21c Client for Linux x86–64** 
+
+
+```diff
+- NOTE
+! Please do modify based on your own setup. This is purely based on my own lab setup.
+```
