@@ -1,0 +1,22 @@
+oracle_install_group:              "oinstall"
+root_directory:                     "/u01"
+stage_dir:                          "/u01/stage"
+oracle_base:                        /u01/app/oracle
+oracleclient_home:                  /u01/app/oracle/product/21.3.0
+oracleclient_inventory:             /u01/app/oraInventory
+oracle_user:                        oracle
+root_user:                          root
+oraclntsoft:                       "oracleclient.soft"    
+oracleclient_installType:           Administrator
+tns_path:                          "{{ oracleclient_home }}/network/admin"
+tns_file:                          "{{ tns_path }}/tnsnames.ora"
+sqlnet_file:                       "{{ tns_path }}/sqlnet.ora"
+portnum:                            pass_dbport
+db_name:                            pass_dbuname
+oracle_sid:                         pass_dbname
+dbhost:                             pass_dbhost
+
+env_clh:
+  ORACLE_HOME: "{{ oracleclient_home }}"
+  ORACLE_BASE: "{{ oracle_base }}"
+  PATH: "{{ oracleclient_home }}/bin:$PATH:/bin:/usr/bin::/usr/ccs/bin"

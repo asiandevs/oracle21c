@@ -1,0 +1,152 @@
+- name: display pre oracle client software install message
+  remote_user: "{{ root_user }}"
+  debug:
+    msg:
+      - 'Oracle Client21c Software Installation in progress at {{ansible_date_time.iso8601}}:'
+
+- name: create required directories
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  file:
+    path="{{ item }}"
+    state=directory
+    owner="{{ oracle_user }}"
+    group="{{ oracle_install_group }}"
+    mode=0755
+  with_items:
+    - "{{ root_directory }}"
+    - "{{ oracleclient_inventory }}"
+    - "{{ oracle_base }}"
+    - "{{ stage_dir }}"
+    - "{{ oracleclient_home }}"
+  tags:
+   - oc21c_createinventory
+
+- name: Copy required script to the target server
+  when: inventory_hostname in groups['ora-x1']
+  copy:
+    src=roles/oracleclient21c_install/files/{{ item }}
+    dest={{ stage_dir }}
+    owner="{{ oracle_user }}"
+    group="{{ oracle_install_group }}"
+    mode=0775
+    remote_src=no
+  with_items:
+    - tns_upd.sh
+  tags:
+   - tns_entry
+
+- name: Unpack Oracle 21c Client Software to the target server
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  unarchive:
+     src={{ stage_dir }}/LINUX.X64_213000_client.zip
+     dest="{{ oracleclient_home }}"
+     remote_src=no
+     mode=0755
+     group="{{ oracle_install_group }}"
+     owner="{{ oracle_user }}"
+  tags:
+   - oc21c_unpack
+
+- name: Setup Oracle Client 21c Software silent response file
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  template: src=roles/oracleclient21c_install/templates/{{ oraclntsoft }}.rsp.j2 dest={{ stage_dir }}/{{ oraclntsoft }}.rsp mode=0755
+  tags:
+   - oc21c_setuprspfile
+
+- name: Install Oracle Client 21c Software
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: "./runInstaller -ignoreSysPrereqs -showProgress -waitforcompletion -silent -responseFile {{ stage_dir }}/{{ oraclntsoft }}.rsp | tee > /tmp/clientinstall.log"
+  args:
+    chdir: "{{ oracleclient_home }}/client"
+  ignore_errors: True
+  tags:
+   - oc21c_softwareinstall
+
+- name: Validate Oracle Client Software Installation
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: "{{ oracleclient_home }}/bin/sqlplus -version"
+  environment: "{{ env_clh }}" 
+  register: ocl_softversion 
+  ignore_errors: True
+  tags:
+   - oc1_softwareversion
+
+- debug:
+    msg: "{{ ocl_softversion.stdout_lines }}" 
+  when: inventory_hostname in groups['ora-x1']
+
+- name: Create tnsnames.ora and sqlnet.ora path if not present
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  file:
+    path: "{{ item.location }}"
+    state: touch
+    mode: "{{ item.mode }}"
+  with_items:
+  - { location: '{{ tns_file }}',mode: '0775'}
+  - { location: '{{ sqlnet_file }}',mode: '0775'} 
+
+- name: Add tns entry for the source databases
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: '{{ stage_dir }}/tns_upd.sh {{ oracle_sid }} {{ dbhost }} {{ portnum }} {{ db_name }} {{ tns_path }}'
+  args:
+    executable: /bin/bash
+
+- name: Add entry to sqlnet.ora file 
+  when: inventory_hostname in groups['ora-x1']
+  blockinfile:
+    path: "{{ sqlnet_file }}"
+    marker: "------"
+    insertafter: '### Modify According to your setup'
+    state: present
+    block: |
+      SQLNET.AUTHENTICATION_SERVICES= (NTS)
+      NAMES.DIRECTORY_PATH= (TNSNAMES, EZCONNECT)
+
+- name: set profile entry for the client software
+  when: inventory_hostname in groups['ora-x1']
+  remote_user: "{{ root_user }}"
+  become: yes
+  become_user: "{{ oracle_user }}"
+  lineinfile:
+   dest: "/home/oracle/.bash_profile"
+   regexp: "^{{ item.start }}"
+   line: "{{ item.start }}{{ item.end }}"
+   insertbefore: "export PATH"
+  with_items:
+   - { start: "ORACLE_HOME=", end: "{{ oracleclient_home }}" }
+   - { start: "TNS_ADMIN=", end: "{{ tns_path }}" }
+   - { start: "NLS_LANG=", end: "AMERICAN_AMERICA.UTF8" }
+   - { start: "LD_LIBRARY_PATH=", end: "/usr/lib:/lib" }
+   - { start: "PATH=", end: "{{ oracleclient_home }}/bin:$PATH:/bin:/usr/bin::/usr/ccs/bin" }
+
+- name: Remove stage directory 
+  when: inventory_hostname in groups['ora-x1']
+  file: path={{ stage_dir }} state=absent
+
+- name: display post install message
+  debug:
+    msg:
+      - 'This playbook completed below task for Single Instance at {{ansible_date_time.iso8601}}:'
+      - '- Install oracle client to the listed servers of ora-x1 groups'
+      - '- Modify tnsnames.ora and sqlnet.ora based on the business requirements'
+      - '- Validate connection using EZconnect (sqlplus username/password@server/SID)'
+      - '- END OF ALL: git repository will be shared'

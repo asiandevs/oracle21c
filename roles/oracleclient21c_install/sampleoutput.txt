@@ -1,0 +1,78 @@
+[root@oel75 ansible]# ansible-playbook oracleclient21c_install.yml
+
+PLAY [ora-x1] ******************************************************************************************************************************************
+
+TASK [Gathering Facts] *********************************************************************************************************************************
+ok: [192.168.56.102]
+
+TASK [oracleclient21c_install : display pre oracle client software install message] ********************************************************************
+ok: [192.168.56.102] => {
+    "msg": [
+        "Oracle Client21c Software Installation in progress at 2021-10-07T09:21:35Z:"
+    ]
+}
+
+TASK [oracleclient21c_install : create required directories] *******************************************************************************************
+ok: [192.168.56.102] => (item=/u01)
+changed: [192.168.56.102] => (item=/u01/app/oraInventory)
+ok: [192.168.56.102] => (item=/u01/app/oracle)
+changed: [192.168.56.102] => (item=/u01/stage)
+changed: [192.168.56.102] => (item=/u01/app/oracle/product/21.3.0)
+
+TASK [oracleclient21c_install : Copy required script to the target server] *****************************************************************************
+changed: [192.168.56.102] => (item=tns_upd.sh)
+
+TASK [oracleclient21c_install : Unpack Oracle 21c Client Software to the target server] ****************************************************************
+changed: [192.168.56.102]
+
+TASK [oracleclient21c_install : Setup Oracle Client 21c Software silent response file] *****************************************************************
+changed: [192.168.56.102]
+
+TASK [oracleclient21c_install : Install Oracle Client 21c Software] ************************************************************************************
+changed: [192.168.56.102]
+
+TASK [oracleclient21c_install : Validate Oracle Client Software Installation] **************************************************************************
+changed: [192.168.56.102]
+
+TASK [oracleclient21c_install : debug] *****************************************************************************************************************
+ok: [192.168.56.102] => {
+    "msg": [
+        "",
+        "SQL*Plus: Release 21.0.0.0.0 - Production",
+        "Version 21.3.0.0.0"
+    ]
+}
+
+TASK [oracleclient21c_install : Create tnsnames.ora and sqlnet.ora path if not present] ****************************************************************
+changed: [192.168.56.102] => (item={u'location': u'/u01/app/oracle/product/21.3.0/network/admin/tnsnames.ora', u'mode': u'0775'})
+changed: [192.168.56.102] => (item={u'location': u'/u01/app/oracle/product/21.3.0/network/admin/sqlnet.ora', u'mode': u'0775'})
+
+TASK [oracleclient21c_install : Add tns entry for the source databases] ********************************************************************************
+changed: [192.168.56.102]
+
+TASK [oracleclient21c_install : Add entry to sqlnet.ora file] ******************************************************************************************
+changed: [192.168.56.102]
+
+TASK [oracleclient21c_install : set profile entry for the client software] *****************************************************************************
+changed: [192.168.56.102] => (item={u'start': u'ORACLE_HOME=', u'end': u'/u01/app/oracle/product/21.3.0'})
+changed: [192.168.56.102] => (item={u'start': u'TNS_ADMIN=', u'end': u'/u01/app/oracle/product/21.3.0/network/admin'})
+changed: [192.168.56.102] => (item={u'start': u'NLS_LANG=', u'end': u'AMERICAN_AMERICA.UTF8'})
+changed: [192.168.56.102] => (item={u'start': u'LD_LIBRARY_PATH=', u'end': u'/usr/lib:/lib'})
+changed: [192.168.56.102] => (item={u'start': u'PATH=', u'end': u'/u01/app/oracle/product/21.3.0/bin:$PATH:/bin:/usr/bin::/usr/ccs/bin'})
+
+TASK [oracleclient21c_install : Remove stage directory] ************************************************************************************************
+changed: [192.168.56.102]
+
+TASK [oracleclient21c_install : display post install message] ******************************************************************************************
+ok: [192.168.56.102] => {
+    "msg": [
+        "This playbook completed below task for Single Instance at 2021-10-07T09:21:35Z:",
+        "- Install oracle client to the listed servers of ora-x1 groups",
+        "- Modify tnsnames.ora and sqlnet.ora based on the business requirements",
+        "- Validate connection using EZconnect (sqlplus username/password@server/SID)",
+        "- END OF ALL: git repository will be shared"
+    ]
+}
+
+PLAY RECAP *********************************************************************************************************************************************
+192.168.56.102             : ok=15   changed=11   unreachable=0    failed=0

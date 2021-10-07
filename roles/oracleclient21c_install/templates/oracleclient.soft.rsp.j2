@@ -1,0 +1,55 @@
+#-------------------------------------------------------------------------------
+# Do not change the following system generated value. 
+#-------------------------------------------------------------------------------
+oracle.install.responseFileVersion=/oracle/install/rspfmt_clientinstall_response_schema_v2121.0.0
+#-------------------------------------------------------------------------------
+# Unix group to be set for the inventory directory.
+#------------------------------------------------------------------------------- 
+UNIX_GROUP_NAME=
+#-------------------------------------------------------------------------------
+# Inventory location.
+#-------------------------------------------------------------------------------
+INVENTORY_LOCATION={{ oracleclient_inventory }}
+#-------------------------------------------------------------------------------
+# Complete path of the Oracle Home
+#-------------------------------------------------------------------------------  
+ORACLE_HOME={{ oracleclient_home }}
+#-------------------------------------------------------------------------------
+# Complete path of the Oracle Base.
+#-------------------------------------------------------------------------------
+ORACLE_BASE={{ oracle_base }}
+#------------------------------------------------------------------------------
+#Name       : INSTALL_TYPE
+#Datatype   : String
+#Description: Installation type of the component.
+#
+#             The following choices are available. The value should contain
+#             only one of these choices.
+#               - Administrator
+#               - Runtime
+#               - InstantClient
+#               - Custom
+#
+#Example    : INSTALL_TYPE = Administrator
+#------------------------------------------------------------------------------
+oracle.install.client.installType={{ oracleclient_installType }}
+#-------------------------------------------------------------------------------
+oracle.install.client.customComponents=
+
+#-------------------------------------------------------------------------------
+# Host name to be used for by the Oracle Scheduler Agent.
+# This needs to be entered in case oracle.rdbms.scheduler is selected in the
+# list of custom components during custom install
+#
+# Example    : oracle.install.client.schedulerAgentHostName = acme.domain.com
+#------------------------------------------------------------------------------
+oracle.install.client.schedulerAgentHostName=
+
+#------------------------------------------------------------------------------
+# Port number to be used for by the Oracle Scheduler Agent.
+# This needs to be entered in case oracle.rdbms.scheduler is selected in the
+# list of custom components during custom install
+#
+# Example: oracle.install.client.schedulerAgentPortNumber = 1500
+#------------------------------------------------------------------------------
+oracle.install.client.schedulerAgentPortNumber=
