@@ -1,9 +1,9 @@
 # oracle21c
-Different database tasks with Ansible
+Different database tasks with Ansible. 
 
 ```diff
 - NOTE
-! Please do modify based on your own setup. This is purely based on my own lab setup.
+! Please do modify based on your own setup. This is purely based on my own lab setup. You can ask me any questions in relate to these playbooks - if you fork and modify to merge - let me know.
 ```
 
 # SI database
@@ -35,8 +35,8 @@ http://www.oracle.com/technetwork/indexes/downloads/index.html
 ## Roles
 
 roles                  | tasks
----------------------- | ---------------------------------
-dbsoftware21c_install |  **To Install Oracle SI database Software**
+---------------------- | ----------------------------------------------------------------------
+dbsoftware21c_install |  **To Install Oracle SI database Software - multiple servers at a time**
 cdb_create_21c       |  **To deploy an empty Container Database (CDB)**
 pdb21c_create        |  **To deploy pluggable database (PDB) to an existing CDB**
 sbdb21c_create       |  **To create a physical Standby database and setup Data Guard Broker**
