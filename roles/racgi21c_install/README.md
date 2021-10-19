@@ -37,7 +37,7 @@ roles                  | tasks
 
 ```
 [root@oel75 ansible]# cat oracleGInRAC21c.yml
-- hosts: ora-x1
+- hosts: ora-x1,ora-x2
   user: root
 
   roles:
