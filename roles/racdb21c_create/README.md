@@ -37,7 +37,7 @@ roles                  | tasks
 > Enable role 3, disable role 1 and role2 [ Pre-step: Role 1 and 2 should be completed ]
 ```
 [root@oel75 ansible]# cat oracleGInRAC21c.yml
-- hosts: ora-x1
+- hosts: ora-x1,ora-x2
   user: root
 
   roles:
