@@ -41,7 +41,7 @@ roles                  | tasks
 
 ```
 [root@oel75 ansible]# cat oracleGInRAC21c.yml
-- hosts: ora-x1
+- hosts: ora-x1,ora-x2
   user: root
 
   roles:
@@ -55,7 +55,7 @@ roles                  | tasks
 > Enable role 2, disable role 1 and role3 [ Pre-step: Role 1 should be completed ]
 ```
 [root@oel75 ansible]# cat oracleGInRAC21c.yml
-- hosts: ora-x1
+- hosts: ora-x1,ora-x2
   user: root
 
   roles:
@@ -69,7 +69,7 @@ roles                  | tasks
 > Enable role 3, disable role 1 and role2 [ Pre-step: Role 1 and 2 should be completed ]
 ```
 [root@oel75 ansible]# cat oracleGInRAC21c.yml
-- hosts: ora-x1
+- hosts: ora-x1,ora-x2
   user: root
 
   roles:
@@ -81,7 +81,7 @@ roles                  | tasks
 For role 1, 2, 3 - you can execute one by one or all of them together. Only thing to make sure the sequence.
 ```
 [root@oel75 ansible]# cat oracleGInRAC21c.yml
-- hosts: ora-x1
+- hosts: ora-x1,ora-x2
   user: root
 
   roles:
@@ -96,7 +96,7 @@ For role 1, 2, 3 - you can execute one by one or all of them together. Only thin
 
 ```
 [root@oel75 ansible]# cat oracleGInRAC21c.yml
-- hosts: ora-x1
+- hosts: ora-x1,ora-x2
   user: root
 
   roles:
