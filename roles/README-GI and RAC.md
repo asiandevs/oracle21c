@@ -91,6 +91,9 @@ For role 1, 2, 3 - you can execute one by one or all of them together. Only thin
    #- racgi_ss_21c_install
 ```
 
+[![Watch the video](https://imgur.com/gallery/g9zGd)](https://youtu.be/c3XGeZPkNRU)
+
+
 ### To Install Oracle Grid Infrastructure for a Standalone Server
 > Enable only role 4 -- This is a separate individual task
 
