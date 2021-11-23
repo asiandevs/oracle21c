@@ -1,0 +1,12 @@
+---
+  - name: RAC Patching | Database Release Update to database home second node (opatchauto)
+    when: inventory_hostname in groups['ora-x2']
+    remote_user: "{{ root_user }}"
+    shell: "export ORACLE_HOME={{ oracle_home }}; export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH; {{ oracle_home }}/OPatch/opatchauto apply {{ dbpatch_dir }} -oh {{ oracle_home }}"
+    register: dbru_patch_apply_oh_first
+    become_user: "{{ root_user }}"
+
+
+  - debug: var=dbru_patch_apply_oh_first.stdout_lines
+    when: inventory_hostname in groups['ora-x2']
+

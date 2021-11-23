@@ -1,0 +1,1008 @@
+[root@oel75 ansible]# ansible-playbook oracleGInRAC21c.yml
+
+PLAY [ora-x1, ora-x2] *************************************************************************************************************************
+
+TASK [Gathering Facts] ************************************************************************************************************************
+ok: [192.168.56.102]
+ok: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : display pre GI RU and Database RU message] ***********************************************************************
+ok: [192.168.56.102] => {
+    "msg": [
+        "This playbook is for GI Release Update and Database Release Update 21.3 to 21.4 started at 2021-11-23T09:34:06Z:"
+    ]
+}
+ok: [192.168.56.103] => {
+    "msg": [
+        "This playbook is for GI Release Update and Database Release Update 21.3 to 21.4 started at 2021-11-23T09:34:10Z:"
+    ]
+}
+
+TASK [racdb21c_patch_apply : RAC Patching | Create required directories] **********************************************************************
+ok: [192.168.56.102] => (item=/u02/stage)
+ok: [192.168.56.102] => (item=/u01/patches/33250101)
+ok: [192.168.56.103] => (item=/u02/stage)
+changed: [192.168.56.103] => (item=/u01/patches/33250101)
+
+TASK [racdb21c_patch_apply : RAC Patching | Create LogFile Directory] *************************************************************************
+ok: [192.168.56.102]
+ok: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | Backup opatch file from grid home] ****************************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | Backup opatch file from oracle home] **************************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | Update required opatch utility in grid home] ******************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | Update opatch ownership in grid home] *************************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | Update required opatch utility in oracle home] ****************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | Update opatch ownership in oracle home] ***********************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | unzip GI RU required patch file] ******************************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | unzip DB RU required patch file] ******************************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | Run OPatch Conflict Check (grid home)] ************************************************************
+changed: [192.168.56.102] => (item=33239276)
+changed: [192.168.56.102] => (item=33271793)
+changed: [192.168.56.103] => (item=33239276)
+changed: [192.168.56.102] => (item=33271789)
+changed: [192.168.56.102] => (item=33276819)
+changed: [192.168.56.102] => (item=33276861)
+changed: [192.168.56.103] => (item=33271793)
+changed: [192.168.56.103] => (item=33271789)
+changed: [192.168.56.103] => (item=33276819)
+changed: [192.168.56.103] => (item=33276861)
+
+TASK [racdb21c_patch_apply : RAC Patching | Run OPatch Conflict Check (oracle home)] **********************************************************
+changed: [192.168.56.102] => (item=33239276)
+changed: [192.168.56.102] => (item=33271793)
+changed: [192.168.56.103] => (item=33239276)
+changed: [192.168.56.103] => (item=33271793)
+
+TASK [racdb21c_patch_apply : RAC Patching | Run DB RU Patch Conflict Check (oracle home)] *****************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | create opatch system space check files for grid home] *********************************************
+changed: [192.168.56.102]
+ok: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | create opatch system space check files for oracle home] *******************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | OPatch SystemSpace Check (grid home)] *************************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | OPatch SystemSpace Check (oracle home)] ***********************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | check inventory for grid home (opatchauto)] *******************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | check inventory for oracle home (opatchauto)] *****************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : RAC Patching | Patch Information for grid home (opatchauto)] *****************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : debug] ***********************************************************************************************************
+ok: [192.168.56.102] => {
+    "opatch_lspatches_gh.stdout_lines": [
+        "There are no Interim patches installed in this Oracle Home \"/u02/app/21.3.0/grid\".",
+        "",
+        "OPatch succeeded."
+    ]
+}
+ok: [192.168.56.103] => {
+    "opatch_lspatches_gh.stdout_lines": [
+        "There are no Interim patches installed in this Oracle Home \"/u02/app/21.3.0/grid\".",
+        "",
+        "OPatch succeeded."
+    ]
+}
+
+TASK [racdb21c_patch_apply : RAC Patching | Patch Information for database home (opatchauto)] *************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : debug] ***********************************************************************************************************
+ok: [192.168.56.102] => {
+    "opatch_lspatches_oh.stdout_lines": [
+        "There are no Interim patches installed in this Oracle Home \"/u02/app/oracle/product/21.3.0/db300\".",
+        "",
+        "OPatch succeeded."
+    ]
+}
+ok: [192.168.56.103] => {
+    "opatch_lspatches_oh.stdout_lines": [
+        "There are no Interim patches installed in this Oracle Home \"/u02/app/oracle/product/21.3.0/db300\".",
+        "",
+        "OPatch succeeded."
+    ]
+}
+
+TASK [racdb21c_patch_apply : RAC Patching | GI Release Update to grid home and db home on first node (opatchauto)] ****************************
+included: /etc/ansible/roles/racdb21c_patch_apply/tasks/ru_frstnode_gindb.yml for 192.168.56.102, 192.168.56.103
+
+TASK [racdb21c_patch_apply : RAC Patching | RU to grid home first node (opatchauto)] **********************************************************
+
+changed: [192.168.56.102]
+
+TASK [racdb21c_patch_apply : debug] ***********************************************************************************************************
+ok: [192.168.56.102] => {
+    "patch_apply_gh_first.stdout_lines": [
+        "",
+        "OPatchauto session is initiated at Tue Nov 23 20:42:03 2021",
+        "",
+        "System initialization log file is /u02/app/21.3.0/grid/cfgtoollogs/opatchautodb/systemconfig2021-11-23_08-42-08PM.log.",
+        "",
+        "Session log file is /u02/app/21.3.0/grid/cfgtoollogs/opatchauto/opatchauto2021-11-23_08-43-06PM.log",
+        "The id for this session is 9FKE",
+        "",
+        "Executing OPatch prereq operations to verify patch applicability on home /u02/app/21.3.0/grid",
+        "Patch applicability verified successfully on home /u02/app/21.3.0/grid",
+        "",
+        "",
+        "Executing patch validation checks on home /u02/app/21.3.0/grid",
+        "Patch validation checks successfully completed on home /u02/app/21.3.0/grid",
+        "",
+        "",
+        "Performing prepatch operations on CRS - bringing down CRS service on home /u02/app/21.3.0/grid",
+        "Prepatch operation log file location: /u02/app/grid/crsdata/ora-x1/crsconfig/crs_prepatch_apply_inplace_ora-x1_2021-11-23_08-44-22PM.log",
+        "CRS service brought down successfully on home /u02/app/21.3.0/grid",
+        "",
+        "",
+        "Start applying binary patch on home /u02/app/21.3.0/grid",
+        "Binary patch applied successfully on home /u02/app/21.3.0/grid",
+        "",
+        "",
+        "Performing postpatch operations on CRS - starting CRS service on home /u02/app/21.3.0/grid",
+        "Postpatch operation log file location: /u02/app/grid/crsdata/ora-x1/crsconfig/crs_postpatch_apply_inplace_ora-x1_2021-11-23_08-52-41PM.log",
+        "CRS service started successfully on home /u02/app/21.3.0/grid",
+        "",
+        "OPatchAuto successful.",
+        "",
+        "--------------------------------Summary--------------------------------",
+        "",
+        "Patching is completed successfully. Please find the summary as follows:",
+        "",
+        "Host:ora-x1",
+        "CRS Home:/u02/app/21.3.0/grid",
+        "Version:21.0.0.0.0",
+        "Summary:",
+        "",
+        "==Following patches were SUCCESSFULLY applied:",
+        "",
+        "Patch: /u01/patches/33250101/33239276",
+        "Log: /u02/app/21.3.0/grid/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_20-48-24PM_1.log",
+        "",
+        "Patch: /u01/patches/33250101/33271789",
+        "Log: /u02/app/21.3.0/grid/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_20-48-24PM_1.log",
+        "",
+        "Patch: /u01/patches/33250101/33271793",
+        "Log: /u02/app/21.3.0/grid/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_20-48-24PM_1.log",
+        "",
+        "Patch: /u01/patches/33250101/33276819",
+        "Log: /u02/app/21.3.0/grid/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_20-48-24PM_1.log",
+        "",
+        "Patch: /u01/patches/33250101/33276861",
+        "Log: /u02/app/21.3.0/grid/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_20-48-24PM_1.log",
+        "",
+        "",
+        "",
+        "OPatchauto session completed at Tue Nov 23 21:11:20 2021",
+        "Time taken to complete the session 29 minutes, 17 seconds"
+    ]
+}
+
+TASK [racdb21c_patch_apply : RAC Patching | RU to database home first node (opatchauto)] ******************************************************
+changed: [192.168.56.102]
+
+TASK [racdb21c_patch_apply : debug] ***********************************************************************************************************
+ok: [192.168.56.102] => {
+    "patch_apply_oh_first.stdout_lines": [
+        "",
+        "OPatchauto session is initiated at Tue Nov 23 21:11:23 2021",
+        "",
+        "System initialization log file is /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/opatchautodb/systemconfig2021-11-23_09-11-30PM.log.",
+        "",
+        "Session log file is /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/opatchauto/opatchauto2021-11-23_09-12-38PM.log",
+        "The id for this session is DNT1",
+        "",
+        "Executing OPatch prereq operations to verify patch applicability on home /u02/app/oracle/product/21.3.0/db300",
+        "Patch applicability verified successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Executing patch validation checks on home /u02/app/oracle/product/21.3.0/db300",
+        "Patch validation checks successfully completed on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Updating OJVM libraries on all hosts",
+        "No step execution required.........",
+        " ",
+        "",
+        "Verifying SQL patch applicability on home /u02/app/oracle/product/21.3.0/db300",
+        "SQL patch applicability verified successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Preparing to bring down database service on home /u02/app/oracle/product/21.3.0/db300",
+        "Successfully prepared home /u02/app/oracle/product/21.3.0/db300 to bring down database service",
+        "",
+        "",
+        "Bringing down database service on home /u02/app/oracle/product/21.3.0/db300",
+        "Database service successfully brought down on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Performing prepatch operation on home /u02/app/oracle/product/21.3.0/db300",
+        "Perpatch operation completed successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Start applying binary patch on home /u02/app/oracle/product/21.3.0/db300",
+        "Binary patch applied successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Performing postpatch operation on home /u02/app/oracle/product/21.3.0/db300",
+        "Postpatch operation completed successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Starting database service on home /u02/app/oracle/product/21.3.0/db300",
+        "Database service successfully started on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Preparing home /u02/app/oracle/product/21.3.0/db300 after database service restarted",
+        "No step execution required.........",
+        " ",
+        "",
+        "Trying to apply SQL patch on home /u02/app/oracle/product/21.3.0/db300",
+        "SQL patch applied successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "OPatchAuto successful.",
+        "",
+        "--------------------------------Summary--------------------------------",
+        "",
+        "Patching is completed successfully. Please find the summary as follows:",
+        "",
+        "Host:ora-x1",
+        "RAC Home:/u02/app/oracle/product/21.3.0/db300",
+        "Version:21.0.0.0.0",
+        "Summary:",
+        "",
+        "==Following patches were SKIPPED:",
+        "",
+        "Patch: /u01/patches/33250101/33271789",
+        "Reason: This patch is not applicable to this specified target type - \"rac_database\"",
+        "",
+        "Patch: /u01/patches/33250101/33276861",
+        "Reason: This patch is not applicable to this specified target type - \"rac_database\"",
+        "",
+        "Patch: /u01/patches/33250101/33276819",
+        "Reason: This patch is not applicable to this specified target type - \"rac_database\"",
+        "",
+        "",
+        "==Following patches were SUCCESSFULLY applied:",
+        "",
+        "Patch: /u01/patches/33250101/33239276",
+        "Log: /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_21-13-25PM_1.log",
+        "",
+        "Patch: /u01/patches/33250101/33271793",
+        "Log: /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_21-13-25PM_1.log",
+        "",
+        "",
+        "Patching session reported following warning(s): ",
+        "_________________________________________________",
+        "",
+        "[WARNING] The database instance 'eaymd1' from '/u02/app/oracle/product/21.3.0/db300', in host'ora-x1' is not running. SQL changes, if any,  will not be applied.",
+        "To apply. the SQL changes, bring up the database instance and run the command manually from any one node (run as oracle).",
+        "Refer to the readme to get the correct steps for applying the sql changes.",
+        "",
+        "",
+        "",
+        "",
+        "OPatchauto session completed at Tue Nov 23 21:18:15 2021",
+        "Time taken to complete the session 6 minutes, 53 seconds"
+    ]
+}
+
+TASK [racdb21c_patch_apply : Restart cluster first node after applying GI RU] *****************************************************************
+included: /etc/ansible/roles/racdb21c_patch_apply/tasks/restsrt_cluster_frstnode.yml for 192.168.56.102, 192.168.56.103
+
+TASK [racdb21c_patch_apply : Restart cluster stop] ********************************************************************************************
+changed: [192.168.56.102]
+
+TASK [racdb21c_patch_apply : Restart cluster start] *******************************************************************************************
+changed: [192.168.56.102]
+
+TASK [racdb21c_patch_apply : Restart cluster second node after applying RU] *******************************************************************
+included: /etc/ansible/roles/racdb21c_patch_apply/tasks/restsrt_cluster_secnode.yml for 192.168.56.102, 192.168.56.103
+
+TASK [racdb21c_patch_apply : Restart cluster stop] ********************************************************************************************
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : Restart cluster start] *******************************************************************************************
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : display post GI RU and pre Database RU message] ******************************************************************
+ok: [192.168.56.102] => {
+    "msg": [
+        "GI Release Update has been completed and Database Release Update will be in progress now at 2021-11-23T09:34:06Z:"
+    ]
+}
+ok: [192.168.56.103] => {
+    "msg": [
+        "GI Release Update has been completed and Database Release Update will be in progress now at 2021-11-23T09:34:10Z:"
+    ]
+}
+
+TASK [racdb21c_patch_apply : RAC Patching | Pause after GI RU patching completion on first node] **********************************************
+Pausing for 600 seconds
+(ctrl+C then 'C' = continue early, ctrl+C then 'A' = abort)
+[racdb21c_patch_apply : RAC Patching | Pause after GI RU patching completion on first node]
+Verify First Node - Everything running OK or NOT.:
+Press 'C' to continue the play or 'A' to abort
+ok: [192.168.56.102]
+
+TASK [racdb21c_patch_apply : RAC Patching | GI Release Update to grid home and db home on second node (opatchauto)] ***************************
+included: /etc/ansible/roles/racdb21c_patch_apply/tasks/ru_secnode_gindb.yml for 192.168.56.102, 192.168.56.103
+
+TASK [racdb21c_patch_apply : RAC Patching | RU to grid home second node (opatchauto)] *********************************************************
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : debug] ***********************************************************************************************************
+ok: [192.168.56.103] => {
+    "patch_apply_gh_second.stdout_lines": [
+        "",
+        "OPatchauto session is initiated at Tue Nov 23 21:27:59 2021",
+        "",
+        "System initialization log file is /u02/app/21.3.0/grid/cfgtoollogs/opatchautodb/systemconfig2021-11-23_09-28-15PM.log.",
+        "",
+        "Session log file is /u02/app/21.3.0/grid/cfgtoollogs/opatchauto/opatchauto2021-11-23_09-29-15PM.log",
+        "The id for this session is DDYJ",
+        "",
+        "Executing OPatch prereq operations to verify patch applicability on home /u02/app/21.3.0/grid",
+        "Patch applicability verified successfully on home /u02/app/21.3.0/grid",
+        "",
+        "",
+        "Executing patch validation checks on home /u02/app/21.3.0/grid",
+        "Patch validation checks successfully completed on home /u02/app/21.3.0/grid",
+        "",
+        "",
+        "Performing prepatch operations on CRS - bringing down CRS service on home /u02/app/21.3.0/grid",
+        "Prepatch operation log file location: /u02/app/grid/crsdata/ora-x2/crsconfig/crs_prepatch_apply_inplace_ora-x2_2021-11-23_09-31-51PM.log",
+        "CRS service brought down successfully on home /u02/app/21.3.0/grid",
+        "",
+        "",
+        "Start applying binary patch on home /u02/app/21.3.0/grid",
+        "Binary patch applied successfully on home /u02/app/21.3.0/grid",
+        "",
+        "",
+        "Performing postpatch operations on CRS - starting CRS service on home /u02/app/21.3.0/grid",
+        "Postpatch operation log file location: /u02/app/grid/crsdata/ora-x2/crsconfig/crs_postpatch_apply_inplace_ora-x2_2021-11-23_09-38-57PM.log",
+        "CRS service started successfully on home /u02/app/21.3.0/grid",
+        "",
+        "OPatchAuto successful.",
+        "",
+        "--------------------------------Summary--------------------------------",
+        "",
+        "Patching is completed successfully. Please find the summary as follows:",
+        "",
+        "Host:ora-x2",
+        "CRS Home:/u02/app/21.3.0/grid",
+        "Version:21.0.0.0.0",
+        "Summary:",
+        "",
+        "==Following patches were SUCCESSFULLY applied:",
+        "",
+        "Patch: /u01/patches/33250101/33239276",
+        "Log: /u02/app/21.3.0/grid/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_21-34-20PM_1.log",
+        "",
+        "Patch: /u01/patches/33250101/33271789",
+        "Log: /u02/app/21.3.0/grid/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_21-34-20PM_1.log",
+        "",
+        "Patch: /u01/patches/33250101/33271793",
+        "Log: /u02/app/21.3.0/grid/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_21-34-20PM_1.log",
+        "",
+        "Patch: /u01/patches/33250101/33276819",
+        "Log: /u02/app/21.3.0/grid/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_21-34-20PM_1.log",
+        "",
+        "Patch: /u01/patches/33250101/33276861",
+        "Log: /u02/app/21.3.0/grid/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_21-34-20PM_1.log",
+        "",
+        "",
+        "",
+        "OPatchauto session completed at Tue Nov 23 21:45:19 2021",
+        "Time taken to complete the session 17 minutes, 21 seconds"
+    ]
+}
+
+TASK [racdb21c_patch_apply : RAC Patching | RU to database home second node (opatchauto)] *****************************************************
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : debug] ***********************************************************************************************************
+ok: [192.168.56.103] => {
+    "patch_apply_oh_second.stdout_lines": [
+        "",
+        "OPatchauto session is initiated at Tue Nov 23 21:45:22 2021",
+        "",
+        "System initialization log file is /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/opatchautodb/systemconfig2021-11-23_09-45-32PM.log.",
+        "",
+        "Session log file is /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/opatchauto/opatchauto2021-11-23_09-46-07PM.log",
+        "The id for this session is 233K",
+        "",
+        "Executing OPatch prereq operations to verify patch applicability on home /u02/app/oracle/product/21.3.0/db300",
+        "Patch applicability verified successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Executing patch validation checks on home /u02/app/oracle/product/21.3.0/db300",
+        "Patch validation checks successfully completed on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Updating OJVM libraries on all hosts",
+        "No step execution required.........",
+        " ",
+        "",
+        "Verifying SQL patch applicability on home /u02/app/oracle/product/21.3.0/db300",
+        "SQL patch applicability verified successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Preparing to bring down database service on home /u02/app/oracle/product/21.3.0/db300",
+        "Successfully prepared home /u02/app/oracle/product/21.3.0/db300 to bring down database service",
+        "",
+        "",
+        "Bringing down database service on home /u02/app/oracle/product/21.3.0/db300",
+        "Database service successfully brought down on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Performing prepatch operation on home /u02/app/oracle/product/21.3.0/db300",
+        "Perpatch operation completed successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Start applying binary patch on home /u02/app/oracle/product/21.3.0/db300",
+        "Binary patch applied successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Performing postpatch operation on home /u02/app/oracle/product/21.3.0/db300",
+        "Postpatch operation completed successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Starting database service on home /u02/app/oracle/product/21.3.0/db300",
+        "Database service successfully started on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Preparing home /u02/app/oracle/product/21.3.0/db300 after database service restarted",
+        "No step execution required.........",
+        " ",
+        "",
+        "Trying to apply SQL patch on home /u02/app/oracle/product/21.3.0/db300",
+        "SQL patch applied successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "OPatchAuto successful.",
+        "",
+        "--------------------------------Summary--------------------------------",
+        "",
+        "Patching is completed successfully. Please find the summary as follows:",
+        "",
+        "Host:ora-x2",
+        "RAC Home:/u02/app/oracle/product/21.3.0/db300",
+        "Version:21.0.0.0.0",
+        "Summary:",
+        "",
+        "==Following patches were SKIPPED:",
+        "",
+        "Patch: /u01/patches/33250101/33271789",
+        "Reason: This patch is not applicable to this specified target type - \"rac_database\"",
+        "",
+        "Patch: /u01/patches/33250101/33276861",
+        "Reason: This patch is not applicable to this specified target type - \"rac_database\"",
+        "",
+        "Patch: /u01/patches/33250101/33276819",
+        "Reason: This patch is not applicable to this specified target type - \"rac_database\"",
+        "",
+        "",
+        "==Following patches were SUCCESSFULLY applied:",
+        "",
+        "Patch: /u01/patches/33250101/33239276",
+        "Log: /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_21-47-26PM_1.log",
+        "",
+        "Patch: /u01/patches/33250101/33271793",
+        "Log: /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_21-47-26PM_1.log",
+        "",
+        "",
+        "Patching session reported following warning(s): ",
+        "_________________________________________________",
+        "",
+        "[WARNING] The database instance 'eaymd2' from '/u02/app/oracle/product/21.3.0/db300', in host'ora-x2' is not running. SQL changes, if any,  will not be applied.",
+        "To apply. the SQL changes, bring up the database instance and run the command manually from any one node (run as oracle).",
+        "Refer to the readme to get the correct steps for applying the sql changes.",
+        "",
+        "",
+        "",
+        "",
+        "OPatchauto session completed at Tue Nov 23 21:54:21 2021",
+        "Time taken to complete the session 9 minutes, 0 second"
+    ]
+}
+
+TASK [racdb21c_patch_apply : RAC Patching | DB Release Update to db home on first and then second node (opatchauto)] **************************
+included: /etc/ansible/roles/racdb21c_patch_apply/tasks/db_ru_nodes.yml for 192.168.56.102, 192.168.56.103
+
+TASK [racdb21c_patch_apply : display pre DATABASE RU message] *********************************************************************************
+ok: [192.168.56.102] => {
+    "msg": [
+        "This playbook is for Oracle Database Patch - Database Release Update of Oracle 21.3 to 21.4 started at 2021-11-23T09:34:06Z:"
+    ]
+}
+ok: [192.168.56.103] => {
+    "msg": [
+        "This playbook is for Oracle Database Patch - Database Release Update of Oracle 21.3 to 21.4 started at 2021-11-23T09:34:10Z:"
+    ]
+}
+
+TASK [racdb21c_patch_apply : DB RU | Stop services from the Database Home using srvctl Node1] *************************************************
+changed: [192.168.56.102]
+
+TASK [racdb21c_patch_apply : RAC Patching | Database Release Update to database home first node (opatchauto)] *********************************
+changed: [192.168.56.102]
+
+TASK [racdb21c_patch_apply : debug] ***********************************************************************************************************
+ok: [192.168.56.102] => {
+    "dbru_patch_apply_oh_first.stdout_lines": [
+        "",
+        "OPatchauto session is initiated at Tue Nov 23 21:54:27 2021",
+        "",
+        "System initialization log file is /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/opatchautodb/systemconfig2021-11-23_09-54-34PM.log.",
+        "",
+        "Session log file is /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/opatchauto/opatchauto2021-11-23_09-55-45PM.log",
+        "The id for this session is 5S3Y",
+        "",
+        "Executing OPatch prereq operations to verify patch applicability on home /u02/app/oracle/product/21.3.0/db300",
+        "Patch applicability verified successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Verifying SQL patch applicability on home /u02/app/oracle/product/21.3.0/db300",
+        "SQL patch applicability verified successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Preparing to bring down database service on home /u02/app/oracle/product/21.3.0/db300",
+        "Successfully prepared home /u02/app/oracle/product/21.3.0/db300 to bring down database service",
+        "",
+        "",
+        "Bringing down database service on home /u02/app/oracle/product/21.3.0/db300",
+        "No step execution required.........",
+        " ",
+        "",
+        "Starting database service on home /u02/app/oracle/product/21.3.0/db300",
+        "No step execution required.........",
+        " ",
+        "",
+        "Preparing home /u02/app/oracle/product/21.3.0/db300 after database service restarted",
+        "No step execution required.........",
+        " ",
+        "OPatchAuto successful.",
+        "",
+        "--------------------------------Summary--------------------------------",
+        "",
+        "Patching is completed successfully. Please find the summary as follows:",
+        "",
+        "Host:ora-x1",
+        "RAC Home:/u02/app/oracle/product/21.3.0/db300",
+        "Version:21.0.0.0.0",
+        "Summary:",
+        "",
+        "==Following patches were SKIPPED:",
+        "",
+        "Patch: /u01/patches/33239276",
+        "Log: /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_21-56-10PM_1.log",
+        "Reason: /u01/patches/33239276 is not required to be applied to oracle home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "",
+        "OPatchauto session completed at Tue Nov 23 21:56:27 2021",
+        "Time taken to complete the session 2 minutes, 0 second"
+    ]
+}
+
+TASK [racdb21c_patch_apply : DB RU | Start services from the Database Home using srvctl Node1] ************************************************
+changed: [192.168.56.102]
+
+TASK [racdb21c_patch_apply : DB RU | Stop services from the Database Home using srvctl Node2] *************************************************
+changed: [192.168.56.102]
+
+TASK [racdb21c_patch_apply : RAC Patching | Database Release Update to database home second node (opatchauto)] ********************************
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : debug] ***********************************************************************************************************
+ok: [192.168.56.103] => {
+    "dbru_patch_apply_oh_first.stdout_lines": [
+        "",
+        "OPatchauto session is initiated at Tue Nov 23 21:56:34 2021",
+        "",
+        "System initialization log file is /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/opatchautodb/systemconfig2021-11-23_09-56-43PM.log.",
+        "",
+        "Session log file is /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/opatchauto/opatchauto2021-11-23_09-57-14PM.log",
+        "The id for this session is 34GE",
+        "",
+        "Executing OPatch prereq operations to verify patch applicability on home /u02/app/oracle/product/21.3.0/db300",
+        "Patch applicability verified successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Verifying SQL patch applicability on home /u02/app/oracle/product/21.3.0/db300",
+        "SQL patch applicability verified successfully on home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "Preparing to bring down database service on home /u02/app/oracle/product/21.3.0/db300",
+        "Successfully prepared home /u02/app/oracle/product/21.3.0/db300 to bring down database service",
+        "",
+        "",
+        "Bringing down database service on home /u02/app/oracle/product/21.3.0/db300",
+        "No step execution required.........",
+        " ",
+        "",
+        "Starting database service on home /u02/app/oracle/product/21.3.0/db300",
+        "No step execution required.........",
+        " ",
+        "",
+        "Preparing home /u02/app/oracle/product/21.3.0/db300 after database service restarted",
+        "No step execution required.........",
+        " ",
+        "OPatchAuto successful.",
+        "",
+        "--------------------------------Summary--------------------------------",
+        "",
+        "Patching is completed successfully. Please find the summary as follows:",
+        "",
+        "Host:ora-x2",
+        "RAC Home:/u02/app/oracle/product/21.3.0/db300",
+        "Version:21.0.0.0.0",
+        "Summary:",
+        "",
+        "==Following patches were SKIPPED:",
+        "",
+        "Patch: /u01/patches/33239276",
+        "Log: /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/opatchauto/core/opatch/opatch2021-11-23_21-57-44PM_1.log",
+        "Reason: /u01/patches/33239276 is not required to be applied to oracle home /u02/app/oracle/product/21.3.0/db300",
+        "",
+        "",
+        "",
+        "OPatchauto session completed at Tue Nov 23 21:58:09 2021",
+        "Time taken to complete the session 1 minute, 36 seconds"
+    ]
+}
+
+TASK [racdb21c_patch_apply : DB RU | Start services from the Database Home using srvctl Node2] ************************************************
+changed: [192.168.56.102]
+
+TASK [racdb21c_patch_apply : RAC Patching | Get the running database lists] *******************************************************************
+included: /etc/ansible/roles/racdb21c_patch_apply/tasks/list_dbs.yml for 192.168.56.102, 192.168.56.103
+
+TASK [racdb21c_patch_apply : RAC Patching | get list of database names on host] ***************************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : DEBUG1: dblist_check.results.stdout_lines by using loop] *********************************************************
+ok: [192.168.56.102] => {
+    "dblist_check.stdout_lines": [
+        "eaymd1"
+    ]
+}
+
+TASK [racdb21c_patch_apply : RAC | get list of database names] ********************************************************************************
+changed: [192.168.56.102]
+
+TASK [racdb21c_patch_apply : debug] ***********************************************************************************************************
+ok: [192.168.56.102] => {
+    "dbulist_check.stdout_lines": [
+        "eaymd"
+    ]
+}
+
+TASK [racdb21c_patch_apply : RAC Patching | Start databse with sqlplus] ***********************************************************************
+included: /etc/ansible/roles/racdb21c_patch_apply/tasks/start_db_withsqlplus.yml for 192.168.56.102, 192.168.56.103
+
+TASK [racdb21c_patch_apply : RAC Patching | disable cluster database databases parameter] *****************************************************
+changed: [192.168.56.102] => (item=eaymd1)
+
+TASK [racdb21c_patch_apply : RAC Patching | stop cluster database using srvctl] ***************************************************************
+failed: [192.168.56.102] (item=eaymd) => {"changed": true, "cmd": "export ORACLE_HOME=/u02/app/oracle/product/21.3.0/db300; export ORACLE_SID=eaymd; export PATH=$PATH:$ORACLE_HOME/bin; srvctl stop database -d eaymd", "delta": "0:00:01.181530", "end": "2021-11-23 21:58:19.787226", "item": "eaymd", "msg": "non-zero return code", "rc": 2, "start": "2021-11-23 21:58:18.605696", "stderr": "", "stderr_lines": [], "stdout": "PRCC-1016 : eaymd was already stopped", "stdout_lines": ["PRCC-1016 : eaymd was already stopped"]}
+...ignoring
+
+TASK [racdb21c_patch_apply : RAC Patching | startup databases using sqlplus] ******************************************************************
+changed: [192.168.56.102] => (item=eaymd1)
+
+TASK [racdb21c_patch_apply : RAC Patching | open all pluggable databases] *********************************************************************
+changed: [192.168.56.102] => (item=eaymd1)
+
+TASK [racdb21c_patch_apply : RAC Patching | Apply Datapatch CDB] ******************************************************************************
+included: /etc/ansible/roles/racdb21c_patch_apply/tasks/datapatch_dbs.yml for 192.168.56.102, 192.168.56.103
+
+TASK [racdb21c_patch_apply : RAC Patching | get list of database names on host] ***************************************************************
+changed: [192.168.56.103]
+changed: [192.168.56.102]
+
+TASK [racdb21c_patch_apply : DEBUG1: dblist_check.results.stdout_lines by using loop] *********************************************************
+ok: [192.168.56.102] => {
+    "dblist_check.stdout_lines": [
+        "eaymd1"
+    ]
+}
+
+TASK [racdb21c_patch_apply : RAC | get list of database names] ********************************************************************************
+changed: [192.168.56.102]
+
+TASK [racdb21c_patch_apply : debug] ***********************************************************************************************************
+ok: [192.168.56.102] => {
+    "dbulist_check.stdout_lines": [
+        "eaymd"
+    ]
+}
+
+TASK [racdb21c_patch_apply : RAC Patching | Data Patch into the Database] *********************************************************************
+changed: [192.168.56.102] => (item=eaymd1)
+
+TASK [racdb21c_patch_apply : debug] ***********************************************************************************************************
+ok: [192.168.56.102] => {
+    "datapatch.results[0].stdout_lines": [
+        "SQL Patching tool version 21.4.0.0.0 Production on Tue Nov 23 21:59:54 2021",
+        "Copyright (c) 2012, 2021, Oracle.  All rights reserved.",
+        "",
+        "Log file for this invocation: /u02/app/oracle/homes/OraDB21Home1/cfgtoollogs/sqlpatch/sqlpatch_28824_2021_11_23_21_59_55/sqlpatch_invocation.log",
+        "",
+        "Connecting to database...OK",
+        "Gathering database info...done",
+        "",
+        "Note:  Datapatch will only apply or rollback SQL fixes for PDBs",
+        "       that are in an open state, no patches will be applied to closed PDBs.",
+        "       Please refer to Note: Datapatch: Database 12c Post Patch SQL Automation",
+        "       (Doc ID 1585822.1)",
+        "",
+        "Bootstrapping registry and package to current versions...done",
+        "Determining current state...done",
+        "",
+        "Current state of interim SQL patches:",
+        "  No interim patches found",
+        "",
+        "Current state of release update SQL patches:",
+        "  Binary registry:",
+        "    21.4.0.0.0 Release_Update 211006052306: Installed",
+        "  PDB CDB$ROOT:",
+        "    Applied 21.4.0.0.0 Release_Update 211006052306 successfully on 23-NOV-21 11.05.37.796035 AM",
+        "  PDB PDB$SEED:",
+        "    Applied 21.4.0.0.0 Release_Update 211006052306 successfully on 23-NOV-21 11.05.40.467828 AM",
+        "  PDB PINKPDB:",
+        "    Applied 21.4.0.0.0 Release_Update 211006052306 successfully on 23-NOV-21 11.05.42.998687 AM",
+        "",
+        "Adding patches to installation queue and performing prereq checks...done",
+        "Installation queue:",
+        "  For the following PDBs: CDB$ROOT PDB$SEED PINKPDB",
+        "    No interim patches need to be rolled back",
+        "    No release update patches need to be installed",
+        "    No interim patches need to be applied",
+        "",
+        "SQL Patching tool complete on Tue Nov 23 22:01:01 2021"
+    ]
+}
+
+TASK [racdb21c_patch_apply : RAC Patching | Compile invalid database objects] *****************************************************************
+included: /etc/ansible/roles/racdb21c_patch_apply/tasks/compile_inv_obj.yml for 192.168.56.102, 192.168.56.103
+
+TASK [racdb21c_patch_apply : RAC Patching | compile invalid objects] **************************************************************************
+changed: [192.168.56.102] => (item=eaymd1)
+
+TASK [racdb21c_patch_apply : debug] ***********************************************************************************************************
+ok: [192.168.56.102] => {
+    "compile.results[0].stdout_lines": [
+        "",
+        "SQL*Plus: Release 21.0.0.0.0 - Production on Tue Nov 23 22:01:03 2021",
+        "Version 21.4.0.0.0",
+        "",
+        "Copyright (c) 1982, 2021, Oracle.  All rights reserved.",
+        "",
+        "",
+        "Connected to:",
+        "Oracle Database 21c Enterprise Edition Release 21.0.0.0.0 - Production",
+        "Version 21.4.0.0.0",
+        "",
+        "SQL> ",
+        "Session altered.",
+        "",
+        "",
+        "TIMESTAMP",
+        "--------------------------------------------------------------------------------",
+        "COMP_TIMESTAMP UTLRP_BGN\t      2021-11-23 22:01:04",
+        "",
+        "DOC>   The following PL/SQL block invokes UTL_RECOMP to recompile invalid",
+        "DOC>   objects in the database. Recompilation time is proportional to the",
+        "DOC>   number of invalid objects in the database, so this command may take",
+        "DOC>   a long time to execute on a database with a large number of invalid",
+        "DOC>   objects.",
+        "DOC>",
+        "DOC>   Use the following queries to track recompilation progress:",
+        "DOC>",
+        "DOC>   1. Query returning the number of invalid objects remaining. This",
+        "DOC>\t  number should decrease with time.",
+        "DOC>\t     SELECT COUNT(*) FROM obj$ WHERE status IN (4, 5, 6);",
+        "DOC>",
+        "DOC>   2. Query returning the number of objects compiled so far. This number",
+        "DOC>\t  should increase with time.",
+        "DOC>\t     SELECT COUNT(*) FROM UTL_RECOMP_COMPILED;",
+        "DOC>",
+        "DOC>   This script automatically chooses serial or parallel recompilation",
+        "DOC>   based on the number of CPUs available (parameter cpu_count) multiplied",
+        "DOC>   by the number of threads per CPU (parameter parallel_threads_per_cpu).",
+        "DOC>   On RAC, this number is added across all RAC nodes.",
+        "DOC>",
+        "DOC>   UTL_RECOMP uses DBMS_SCHEDULER to create jobs for parallel",
+        "DOC>   recompilation. Jobs are created without instance affinity so that they",
+        "DOC>   can migrate across RAC nodes. Use the following queries to verify",
+        "DOC>   whether UTL_RECOMP jobs are being created and run correctly:",
+        "DOC>",
+        "DOC>   1. Query showing jobs created by UTL_RECOMP",
+        "DOC>\t     SELECT job_name FROM dba_scheduler_jobs",
+        "DOC>\t\tWHERE job_name like 'UTL_RECOMP_SLAVE_%';",
+        "DOC>",
+        "DOC>   2. Query showing UTL_RECOMP jobs that are running",
+        "DOC>\t     SELECT job_name FROM dba_scheduler_running_jobs",
+        "DOC>\t\tWHERE job_name like 'UTL_RECOMP_SLAVE_%';",
+        "DOC>#",
+        "",
+        "PL/SQL procedure successfully completed.",
+        "",
+        "",
+        "TIMESTAMP",
+        "--------------------------------------------------------------------------------",
+        "COMP_TIMESTAMP UTLRP_END\t      2021-11-23 22:01:08",
+        "",
+        "DOC> The following query reports the number of invalid objects.",
+        "DOC>",
+        "DOC> If the number is higher than expected, please examine the error",
+        "DOC> messages reported with each object (using SHOW ERRORS) to see if they",
+        "DOC> point to system misconfiguration or resource constraints that must be",
+        "DOC> fixed before attempting to recompile these objects.",
+        "DOC>#",
+        "",
+        "OBJECTS WITH ERRORS",
+        "-------------------",
+        "\t\t  0",
+        "",
+        "DOC> The following query reports the number of exceptions caught during",
+        "DOC> recompilation. If this number is non-zero, please query the error",
+        "DOC> messages in the table UTL_RECOMP_ERRORS to see if any of these errors",
+        "DOC> are due to misconfiguration or resource constraints that must be",
+        "DOC> fixed before objects can compile successfully.",
+        "DOC> Note: Typical compilation errors (due to coding errors) are not",
+        "DOC>\t   logged into this table: they go into DBA_ERRORS instead.",
+        "DOC>#",
+        "",
+        "ERRORS DURING RECOMPILATION",
+        "---------------------------",
+        "\t\t\t  0",
+        "",
+        "",
+        "Function created.",
+        "",
+        "",
+        "PL/SQL procedure successfully completed.",
+        "",
+        "",
+        "Function dropped.",
+        "",
+        "",
+        "PL/SQL procedure successfully completed.",
+        "",
+        "SQL> Disconnected from Oracle Database 21c Enterprise Edition Release 21.0.0.0.0 - Production",
+        "Version 21.4.0.0.0"
+    ]
+}
+
+TASK [racdb21c_patch_apply : RAC Patching | Start databse with srvctl] ************************************************************************
+included: /etc/ansible/roles/racdb21c_patch_apply/tasks/start_db_withcrs.yml for 192.168.56.102, 192.168.56.103
+
+TASK [racdb21c_patch_apply : RAC Patching | enable cluster database databases parameter] ******************************************************
+changed: [192.168.56.102] => (item=eaymd1)
+
+TASK [racdb21c_patch_apply : RAC Patching | stop databases using sqlplus] *********************************************************************
+changed: [192.168.56.102] => (item=eaymd1)
+
+TASK [racdb21c_patch_apply : RAC Patching | Start cluster database using srvctl] **************************************************************
+changed: [192.168.56.102] => (item=eaymd)
+
+TASK [racdb21c_patch_apply : RAC Patching | verify applied patch] *****************************************************************************
+included: /etc/ansible/roles/racdb21c_patch_apply/tasks/verify_patch_apply.yml for 192.168.56.102, 192.168.56.103
+
+TASK [racdb21c_patch_apply : RAC Patching | Patch Information for grid home after apply(opatchauto)] ******************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : debug] ***********************************************************************************************************
+ok: [192.168.56.102] => {
+    "opatch_lspatches_gh.stdout_lines": [
+        "33276861;TOMCAT RELEASE UPDATE 21.0.0.0.0 (33276861)",
+        "33276819;RHP RELEASE UPDATE 21.4.0.0.0 (33276819)",
+        "33271793;OCW RELEASE UPDATE 21.4.0.0.0 (33271793)",
+        "33271789;ACFS RELEASE UPDATE 21.4.0.0.0 (33271789)",
+        "33239276;Database Release Update : 21.4.0.0.211019 (33239276)",
+        "",
+        "OPatch succeeded."
+    ]
+}
+ok: [192.168.56.103] => {
+    "opatch_lspatches_gh.stdout_lines": [
+        "33276861;TOMCAT RELEASE UPDATE 21.0.0.0.0 (33276861)",
+        "33276819;RHP RELEASE UPDATE 21.4.0.0.0 (33276819)",
+        "33271793;OCW RELEASE UPDATE 21.4.0.0.0 (33271793)",
+        "33271789;ACFS RELEASE UPDATE 21.4.0.0.0 (33271789)",
+        "33239276;Database Release Update : 21.4.0.0.211019 (33239276)",
+        "",
+        "OPatch succeeded."
+    ]
+}
+
+TASK [racdb21c_patch_apply : RAC Patching | Patch Information for database home (opatchauto)] *************************************************
+changed: [192.168.56.102]
+changed: [192.168.56.103]
+
+TASK [racdb21c_patch_apply : debug] ***********************************************************************************************************
+ok: [192.168.56.102] => {
+    "opatch_lspatches_oh.stdout_lines": [
+        "33271793;OCW RELEASE UPDATE 21.4.0.0.0 (33271793)",
+        "33239276;Database Release Update : 21.4.0.0.211019 (33239276)",
+        "",
+        "OPatch succeeded."
+    ]
+}
+ok: [192.168.56.103] => {
+    "opatch_lspatches_oh.stdout_lines": [
+        "33271793;OCW RELEASE UPDATE 21.4.0.0.0 (33271793)",
+        "33239276;Database Release Update : 21.4.0.0.211019 (33239276)",
+        "",
+        "OPatch succeeded."
+    ]
+}
+
+TASK [racdb21c_patch_apply : Remove stage directory] ******************************************************************************************
+changed: [192.168.56.102] => (item=/u02/stage)
+changed: [192.168.56.103] => (item=/u02/stage)
+
+TASK [racdb21c_patch_apply : display post GI RU message] **************************************************************************************
+ok: [192.168.56.102] => {
+    "msg": [
+        "This completed below task for RAC database at 2021-11-23T09:34:06Z:",
+        "Oracle Database Patch - GI Release Update and Database Release Update of Oracle 21.3 to 21.4 task completed successfully",
+        "END OF ALL: git repository will be shared"
+    ]
+}
+ok: [192.168.56.103] => {
+    "msg": [
+        "This completed below task for RAC database at 2021-11-23T09:34:10Z:",
+        "Oracle Database Patch - GI Release Update and Database Release Update of Oracle 21.3 to 21.4 task completed successfully",
+        "END OF ALL: git repository will be shared"
+    ]
+}
+
+PLAY RECAP ************************************************************************************************************************************
+192.168.56.102             : ok=76   changed=44   unreachable=0    failed=0
+192.168.56.103             : ok=54   changed=29   unreachable=0    failed=0

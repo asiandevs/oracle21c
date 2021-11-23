@@ -1,0 +1,8 @@
+---
+  - name: RAC Patching | Run DB RU Patch Conflict Check (oracle home)
+    shell: "export ORACLE_HOME={{ oracle_home }}; export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH; cd {{ dbpatch_dir }};{{ oracle_home }}/OPatch/opatch prereq CheckConflictAgainstOHWithDetail -ph ./ > {{ logdir }}/CheckConflictAgainstoraclehome.log 2>&1"
+    remote_user: "{{root_user }}"
+    become: Yes
+    become_user: "{{ oracle_user }}"
+    register: dbru_opatch_conflicts
+

@@ -1,0 +1,27 @@
+---
+######################################################################################
+# Summary Steps:
+# Assumption:
+# - required patches are downloaded and staged [ex: this case patch stage directory]
+# - This case we are patching non-rolling and GI home and RAC home separately
+# i)  Shutdown all instances under target oracle home  
+# ii)  Apply Database Release Update of Oracle Inventory
+# iii) startup all instances under target oracle home
+#######################################################################################
+- name: display pre DATABASE RU message
+  debug:
+    msg:
+      - 'This playbook is for Oracle Database Patch - Database Release Update of Oracle 21.3 to 21.4 started at {{ansible_date_time.iso8601}}:'
+
+- name: Preparation tasks for apply  Oracle GI RU
+  block:
+    - import_tasks:     dbru_stop_allinstances_firstnode.yml
+    - import_tasks:     db_ru_frstnode.yml
+    - import_tasks:     dbru_start_allinstances_firstnode.yml
+    - import_tasks:     dbru_stop_allinstances_secondnode.yml
+    - import_tasks:     db_ru_secndnode.yml
+    - import_tasks:     dbru_start_allinstances_secondnode.yml
+  become:               yes
+  become_user:          oracle
+  tags:
+    - dbru_patch

@@ -1,0 +1,7 @@
+---
+  - name: DB RU | Start services from the Database Home using srvctl Node2
+    when: inventory_hostname in groups['ora-x1']
+    shell: export ORACLE_HOME={{ oracle_home }}; export PATH=$PATH:$ORACLE_HOME/bin; srvctl start home -o {{ oracle_home }} -s {{ state_dirn2 }} -n {{ node2 }}
+    remote_user: "{{ oracle_user }}"
+    ignore_errors: True
+
