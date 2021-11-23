@@ -130,4 +130,3 @@ ansible-playbook oracleGInRAC21c.yml
 
 ```
 5. Sample logfile is attached.
-4. Run the playbook role "oracleGInRAC21c.yml"
