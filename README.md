@@ -43,6 +43,7 @@ sbdb21c_create       |  **To create a physical Standby database and setup Data G
 racgi21c_install     |  **To Install Oracle Grid Infrastructure Installation**
 racdbsoft21c_install |  **To Install Oracle RAC software installation**
 racdb21c_create      |  **To create Two Node RACDB ~21C**
+racdb21c_patch_apply |  **To apply GI Release Update and Database Release Update ~21C October 2021**
 racgi_ss_21c_install |  **Oracle Grid Infrastructure for a Standalone Server**
 oracleclient21c_install| **Deployment of Oracle Database 21c Client for Linux x86–64** 
 
