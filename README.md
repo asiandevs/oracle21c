@@ -3,7 +3,7 @@ Different database tasks with Ansible.
 
 ```diff
 - NOTE
-! Please do modify based on your own setup. This is purely based on my own lab setup. You can ask me any questions in relate to these playbooks - if you fork and modify to merge - let me know.
+! Make sure any Licence requirements from your side. Please do modify based on your own setup. This is purely based on my own lab setup. You can ask me any questions in relate to these playbooks - if you fork and modify to merge - let me know.
 ```
 
 # SI database
