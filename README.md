@@ -46,26 +46,12 @@ racdb21c_create      |  **To create Two Node RACDB ~21C**
 racdb21c_patch_apply |  **To apply GI Release Update and Database Release Update ~21C October 2021**
 racgi_ss_21c_install |  **Oracle Grid Infrastructure for a Standalone Server**
 oracleclient21c_install| **Deployment of Oracle Database 21c Client for Linux x86–64** 
-
-### Other Roles
-
-## RAC database upgrade / Downgrade [ using flashback] 
-https://github.com/asiandevs/RAC18CUpgradeDowngrade
-
-## Oracle Database Client Installation
-https://github.com/asiandevs/Oracle_Database_Client_Installation
-
-## Linux setup for Oracle Software Installation
-https://github.com/asiandevs/oraclelinuxsetup
-
-## Oracle Cloud File System [ACFS] setup
-https://github.com/asiandevs/racdb_createacfs
-
-## Jenkins CI/CD - Deployment of Oracle RDBMS software Installation and Create Oracle Database
-https://github.com/asiandevs/oradbjenkins
-
-## Docker image -- Oracle Database 19c (19.3) Enterprise Edition 
-https://hub.docker.com/r/banglamon/oracle193db
+RAC database upgrade / Downgrade [ using flashback] | **https://github.com/asiandevs/RAC18CUpgradeDowngrade**
+Oracle Cloud File System [ACFS] setup | **https://github.com/asiandevs/racdb_createacfs**
+Oracle Database Client Installation | **https://github.com/asiandevs/Oracle_Database_Client_Installation**
+Linux setup for Oracle Software Installation | **https://github.com/asiandevs/oraclelinuxsetup**
+Jenkins CI/CD - Deployment of Oracle RDBMS software Installation and Create Oracle Database | **https://github.com/asiandevs/oradbjenkins**
+Docker image -- Oracle Database 19c (19.3) Enterprise Edition | **https://hub.docker.com/r/banglamon/oracle193db**
 
 ```diff
 - NOTE
