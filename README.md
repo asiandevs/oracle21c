@@ -36,16 +36,16 @@ http://www.oracle.com/technetwork/indexes/downloads/index.html
 
 roles                  | tasks
 ---------------------- | ----------------------------------------------------------------------
-dbsoftware21c_install |  **To Install Oracle SI database Software - multiple servers at a time**
-cdb_create_21c       |  **To deploy an empty Container Database (CDB)**
+dbsoftware21c_install |  **To Install Oracle SI database Software - multiple servers at a time https://github.com/asiandevs/oracle21c/tree/main/roles/dbsoftware21c_install**
+cdb_create_21c       |  **To deploy an empty Container Database (CDB) https://github.com/asiandevs/oracle21c/tree/main/roles/cdb_create_21c**
 pdb21c_create        |  **To deploy pluggable database (PDB) to an existing CDB https://github.com/asiandevs/oracle21c/tree/main/roles/pdb21c_create**
-sbdb21c_create       |  **To create a physical Standby database and setup Data Guard Broker**
-racgi21c_install     |  **To Install Oracle Grid Infrastructure Installation**
-racdbsoft21c_install |  **To Install Oracle RAC software installation**
-racdb21c_create      |  **To create Two Node RACDB ~21C**
-racdb21c_patch_apply |  **To apply GI Release Update and Database Release Update ~21C October 2021**
-racgi_ss_21c_install |  **Oracle Grid Infrastructure for a Standalone Server**
-oracleclient21c_install| **Deployment of Oracle Database 21c Client for Linux x86–64** 
+sbdb21c_create       |  **To create a physical Standby database and setup Data Guard Broker https://github.com/asiandevs/oracle21c/tree/main/roles/sbdb21c_create**
+racgi21c_install     |  **To Install Oracle Grid Infrastructure Installation https://github.com/asiandevs/oracle21c/tree/main/roles/racgi21c_install**
+racdbsoft21c_install |  **To Install Oracle RAC software installation https://github.com/asiandevs/oracle21c/tree/main/roles/racdbsoft21c_install**
+racdb21c_create      |  **To create Two Node RACDB ~21C https://github.com/asiandevs/oracle21c/tree/main/roles/racdb21c_create**
+racdb21c_patch_apply |  **To apply GI Release Update and Database Release Update ~21C October 2021 https://github.com/asiandevs/oracle21c/tree/main/roles/racdb21c_patch_apply**
+racgi_ss_21c_install |  **Oracle Grid Infrastructure for a Standalone Server https://github.com/asiandevs/oracle21c/tree/main/roles/racgi_ss_21c_install**
+oracleclient21c_install| **Deployment of Oracle Database 21c Client for Linux x86–64 https://github.com/asiandevs/oracle21c/tree/main/roles/oracleclient21c_install** 
 RAC database upgrade / Downgrade [ using flashback] | **https://github.com/asiandevs/RAC18CUpgradeDowngrade**
 Oracle Cloud File System [ACFS] setup | **https://github.com/asiandevs/racdb_createacfs**
 Oracle Database Client Installation | **https://github.com/asiandevs/Oracle_Database_Client_Installation**
