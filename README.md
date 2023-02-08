@@ -38,7 +38,7 @@ roles                  | tasks
 ---------------------- | ----------------------------------------------------------------------
 dbsoftware21c_install |  **To Install Oracle SI database Software - multiple servers at a time**
 cdb_create_21c       |  **To deploy an empty Container Database (CDB)**
-pdb21c_create        |  **To deploy pluggable database (PDB) to an existing CDB**
+pdb21c_create        |  **To deploy pluggable database (PDB) to an existing CDB https://github.com/asiandevs/oracle21c/tree/main/roles/pdb21c_create**
 sbdb21c_create       |  **To create a physical Standby database and setup Data Guard Broker**
 racgi21c_install     |  **To Install Oracle Grid Infrastructure Installation**
 racdbsoft21c_install |  **To Install Oracle RAC software installation**
